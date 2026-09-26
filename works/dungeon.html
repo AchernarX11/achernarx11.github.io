@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地牢 — Achernar</title>
+  <meta name="description" content="一个全 C++ 写的 UE5 2D 地牢：Paper2D 铺地图、PaperZD 做动画，伤害、受击盒、攻击判定全部自己搭。先画类结构再写代码，独立开发。">
+  <meta name="theme-color" content="#f9f7f4">
+
+  <link rel="icon" href="../assets/icons/icon-a.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/icons/icon-a.png" type="image/png" sizes="64x64">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+
+  <!-- ============ 顶部导航 ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="logo" href="../index.html">
+        <img class="logo__mark" src="../assets/images/logo.webp" alt="" width="633" height="633" loading="lazy" decoding="async">
+        <span class="logo__text">Achernar</span>
+      </a>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="visually-hidden">展开导航菜单</span>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+
+        <ul class="nav__list" id="nav-menu" data-open="false">
+          <li><a class="nav__link" href="../index.html#works">作品</a></li>
+          <li><a class="nav__link" href="../index.html#about">关于</a></li>
+          <li><a class="nav__link" href="../index.html#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="section">
+      <div class="container">
+        <!-- ============ 详情头部 ============ -->
+        <header class="detail__head">
+          <p class="section__eyebrow">Case 08 / 08</p>
+          <h1 class="detail__title">地牢</h1>
+          <ul class="tag-list detail__tags">
+            <li class="tag">UE5</li>
+            <li class="tag">C++</li>
+            <li class="tag">Paper2D</li>
+            <li class="tag">PaperZD</li>
+          </ul>
+          <p class="detail__lead">
+            上一个项目把引擎的 2D 流程摸了一遍，这个项目就接着往下走：既然画面能用瓦片和纸片精灵搭出来，
+            那么打架这件事也得自己从头写。规则很简单——一个持盾的骑士，两种怪物，互相能打。
+            这次动手之前先把类结构画了出来，代码按图写，算是补上了之前几个项目缺的那块「先想后写」。
+          </p>
+
+          <dl class="spec-list detail__meta">
+            <div class="spec">
+              <dt class="spec__key">时间</dt>
+              <dd class="spec__value">2026 年 9 月</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">团队</dt>
+              <dd class="spec__value">独立开发</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">角色</dt>
+              <dd class="spec__value">独立开发：类结构设计、全部 C++ 代码、关卡与动画资产配置</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">开发环境</dt>
+              <dd class="spec__value">Unreal Engine 5.7 + Visual Studio / VS Code（Windows）</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">状态</dt>
+              <dd class="spec__value">开发中</dd>
+            </div>
+          </dl>
+        </header>
+
+        <div class="detail__body">
+          <!-- ============ 概览与技术栈 ============ -->
+          <section class="detail__section" aria-labelledby="overview-title">
+            <h2 id="overview-title">概览与技术栈</h2>
+            <p>
+              这次的目标和上一个项目不太一样。上一个只想知道 2D 在 UE 里怎么搭起来，所以做出来的东西
+              能走能跳就够了；这个项目想要的是「打起来」——攻击有判定、挨打会掉血、血空了会倒下。
+              也正因为如此，动手第一件事不是打开编辑器，而是先在一张纸上把类的关系画清楚。
+            </p>
+            <p>
+              架构分两条线。竖着的带箭头的是继承链：最上面是 PaperZD 提供的角色基类，
+              往下抽出一个自己的角色基类，再往下分给英雄和敌人，敌人下面才是具体的骷髅和野猪。
+              这条线上的每个类只管自己那一层的差异，公共的部分——受击盒、血量组件、当前动画序列——
+              全都放在角色基类里，这样加一种新怪物只需要写它跟别人不一样的地方。
+            </p>
+            <p>
+              横着的一条是能力。伤害这件事我没有做成一个「战斗管理器」，而是拆成了两个独立的东西：
+              一个血量组件，谁有血就挂谁身上；一个伤害接口，只声明「你可以对我造成这么多伤害」。
+              接口有三个参数，分别是伤害值、伤害来源和责任人，足够追溯一次攻击到底是谁打的。
+              这样拆开之后，攻击方不需要知道对面是英雄还是怪物，只要判断对方实现了这个接口，
+              把伤害递过去就行——后来加野猪的时候，攻击逻辑一行都没改。
+            </p>
+            <p>
+              攻击判定这一块花的时间最多。最开始的想法是在 Tick 里每帧检查一次距离，
+              但那样既不精确也不跟动画对齐。最后用的是 PaperZD 的动画通知：
+              写一个继承自动画通知的类，把它挂在攻击动画的某一帧上，动画播到那一帧才去问一句
+              「打到人了没有」。好处是判定和手感绑在一起——想让攻击来得早一点或晚一点，
+              只要在动画编辑器里挪一下通知的位置，代码完全不用动。
+            </p>
+            <p>
+              没做的部分也说清楚：地图是手刷的瓦片地图，没有随机生成；没有做 UI，血量目前靠动画表现和日志；
+              也没有存档。这三块是这个版本明确缺的东西，待后续开发。
+            </p>
+
+            <h3>技术栈</h3>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">引擎</dt>
+                <dd class="spec__value">Unreal Engine 5.7</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">语言</dt>
+                <dd class="spec__value">C++：逻辑全部写在代码里，蓝图只作为资产存在（角色蓝图与动画蓝图）</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">代码组织</dt>
+                <dd class="spec__value">按角色、组件、游戏框架、接口、怪物五个目录分文件，类名统一 CPP_ 前缀</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">2D 表现</dt>
+                <dd class="spec__value">Paper2D 的瓦片地图铺关卡，PaperZD 的动画源与动画序列驱动纸片精灵</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">角色体系</dt>
+                <dd class="spec__value">PaperZD 角色基类派生出自制基类，再分出英雄与敌人，敌人下分骷髅和野猪</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">战斗</dt>
+                <dd class="spec__value">自定义伤害接口 + 受击盒重叠检测 + 血量组件，三段拼成一条完整的伤害链</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">攻击判定</dt>
+                <dd class="spec__value">继承 PaperZD 的动画通知，挂在攻击动画的指定帧上触发命中检查</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">AI</dt>
+                <dd class="spec__value">怪物侧自己写了一个轻量的 AI 控制器，配合各自的动画类切换状态</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 截图与演示 ============ -->
+          <section class="detail__section" aria-labelledby="shots-title">
+            <h2 id="shots-title">截图与演示</h2>
+            <p>
+              先看关卡本身。地图是一张手刷的瓦片地图，拆成了两块分开管理；
+              场上站着三个纸片精灵，每个精灵外面套着的那圈椭圆就是它的碰撞范围，箭头是朝向——
+              这个项目里几乎所有判定都建立在这两样东西上，调数值的时候基本整晚都在盯着这一屏。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dungeon-cover.webp" alt="UE5 编辑器主界面，中间是 2D 关卡的编辑视图，整片地图呈紫红色，上面有三个纸片精灵：靠左是一个持盾的骑士主角、中间是一面白色旗帜、右侧是一个绿色小怪物，三个精灵外面各套着一圈椭圆形的碰撞范围轮廓并带蓝色朝向箭头；左侧大纲面板列出 MainMap、WorldSettings、BP_Skeleton、Plane、PlayerStart、T_DungeonTiles_TileMap 与 T_DungeonTiles_TileMap2 共七个对象，右下内容浏览器停在 Blueprints/Character/Hero 目录，显示 AnimSequences 文件夹与 ABP_HeroAnim、AS_Hero、BP_Hero 三个资产" width="2558" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  关卡编辑视图。大纲里只有七个对象，其中两个是瓦片地图、一个是出生点，
+                  剩下的就是角色、旗帜和一架背景用的平面——场景本身很空，
+                  复杂度全在代码那一侧。内容浏览器里能看到英雄那套资产：
+                  一个动画源、一个动画蓝图、一个角色蓝图，加一个放动画序列的文件夹。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dungeon-demo-01.webp" alt="PaperZD 的动画源资产编辑器，正在编辑名为 AS_Hero 的动画源，中间视口里是一个放大显示的像素精灵：戴绿色尖帽、尖耳、绿色上衣短裤、红粉色靴子的小男孩；左侧是资产浏览器，列出 Idle、Jump、Walk、Run 等动画序列；右侧属性面板有动画序列、主方向序列、镜像模式为无等选项，还有一个标注着 N 与角度、用于选择八个方向的八角形控件；底部是带时间轴与通知轨道的动画预览区" width="2558" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  英雄的动画源。PaperZD 把这套东西单独抽成了一个资产：里面登记这个角色有哪些动画序列、
+                  每个序列支持哪几个方向、要不要镜像。右侧那个八角形的角度控件就是用来选方向的——
+                  角色的待机、行走、跑、跳各有若干朝向，全部在这里对齐，代码侧只负责告诉它「现在往哪个方向走」。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <video class="shot__video" src="../assets/video/dungeon-demo-02.mp4" poster="../assets/images/dungeon-cover.webp" width="2560" height="1600" controls preload="none" playsinline>
+                    你的浏览器不支持 HTML5 视频，无法在这里播放这段录屏。
+                  </video>
+                </div>
+                <figcaption class="shot__caption">
+                  一段实际游玩的录屏，能看到骑士跑动、挥砍和怪物挨打之后的反应。
+                  重点可以留意攻击命中的时机——它跟挥砍动画的某一帧是对齐的，不是按固定的时间间隔触发的。
+                  视频默认不加载也不自动播放，点了播放按钮才开始下载，录屏是原画质，文件不小，需要等一会儿。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 技术文档 ============ -->
+          <section class="detail__section" aria-labelledby="docs-title">
+            <h2 id="docs-title">技术文档</h2>
+            <p>
+              这个项目没有单独写文档，所以用七张图把代码讲一遍。顺序是照着写代码的顺序来的：
+              先看那张手画的类结构图，再看代码怎么按结构分目录，然后从角色基类开始，
+              沿着一次攻击往下走——伤害接口怎么定义、血量怎么扣、怪物怎么判定命中、动画通知在哪一帧触发。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dungeon-doc-01.webp" alt="一张手画的类继承结构图，白色圆角方框配白色箭头：顶层方框是 APaperZDCharacter，向下指向 CPP_PaperCharacter_Base，该框左侧并排着 CPP_HealthComponent 与 CPP_DamageInterface 两个方框；CPP_PaperCharacter_Base 向下分出 CPP_Hero 与 CPP_Enemy_Base，CPP_Hero 左侧并排 CPP_PlayerController 与 CPP_HeroAnim，CPP_Enemy_Base 右侧并排 CPP_MonsterAnimZD_Base 与 CPP_MonsterController，并再向下派生出 CPP_Skeleton 与 CPP_Boar；图的右上角另有两个独立方框 CPP_Gamemode 与 CPP_AN_CheckHitBox" width="1728" height="845" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  动手之前先画的类结构。竖着的箭头是继承，横着并排的几个方框是会挂到那个类上的东西。
+                  这张图最大的作用是提前把「一件事该由谁负责」定下来：
+                  血量归组件、伤害传递归接口、攻击判定归动画通知，写的时候就不会到处临时加函数了。
+                  这也是这个项目和前几个项目最明显的区别。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dungeon-doc-02.webp" alt="Visual Studio 的解决方案资源管理器，项目名 StudyProject_8，Public 目录下按 Character、Component、Game、Interface、Monster 五个文件夹分类：Character 里有 CPP_AN_CheckHitBox.h、CPP_Hero.h、CPP_HeroAnimZD.h、CPP_PaperCharacter_Base.h；Component 里有 CPP_HealthComponent.h；Game 里有 CPP_Gamemode.h 与 CPP_PlayerController.h；Interface 里有 CPP_DamageInterface.h；Monster 里有 CPP_Boar.h、CPP_Enemy_Base.h、CPP_MonsterAIController.h、CPP_MonsterAnimZD_Base.h、CPP_Skeleton.h" width="382" height="753" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  代码目录就是照着上面那张图分的。五个文件夹分别对应角色、组件、游戏框架、接口和怪物，
+                  头文件与实现文件在 Public 和 Private 下对称摆放，找的时候不用猜。
+                  类名统一带 CPP_ 前缀，这一条是为了在编辑器里翻资产或者看报错时，
+                  一眼就能把「自己写的」和「引擎自带的」分开。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dungeon-doc-04.webp" alt="VS Code 里打开的 C++ 代码截图，文件是 CPP_PaperCharacter_Base.h 与对应的实现，类声明为 ACPP_PaperCharacter_Base，同时继承 APaperZDCharacter 和 ICPP_DamageInterface；成员里有 TObjectPtr 类型的 Flipbook、HurtBox、HealthComponent 和 PaperZDAnimSequence，其中第 33 行写着 float HurtBoxSizeX = 20.f，另有 bool bIsSummoned = false；下方是 Initialization 与 InitDamageInterface_Implementation 两个函数的实现，初始化的逻辑里通过 UPaperZDAnimInstance 拿到了动画实例并用 JumpToNode 切换动画节点" width="2557" height="1595" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  角色基类，整个项目里被继承最多的一层，所以它只放两类东西：
+                  所有角色都有的部件——受击盒、血量组件、当前动画序列；
+                  所有角色都得会的事——初始化和受伤害。受击盒那个 20 的宽度是个整数常量，
+                  因为它要跟像素网格对齐，写小数反而不好调。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dungeon-doc-07.webp" alt="VS Code 里打开的 CPP_DamageInterface.h 代码截图，上半是 UINTERFACE(MinimalAPI) 修饰的 UCPP_DamageInterface 类，下半是 ICPP_DamageInterface，其中声明了一个接口函数 void DamageInterface(float DamageAmount, AActor* DamageCauser, AController* InstigatorController)，宏写作 UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category=Damage)；下半部分还显示了对应的 cpp 文件，其中只有一行包含头文件和一段自动生成的注释" width="2551" height="1592" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  伤害接口。三个参数合起来回答「谁被打了、打了多少、谁打的」，
+                  做成接口而不是直接调用，是为了让攻击方不必认识被打的对象。
+                  接口函数用的是蓝图原生事件，所以蓝图里也能实现自己的受伤害表现，
+                  但这份工程里实现是写在 C++ 的角色基类里的。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dungeon-doc-03.webp" alt="VS Code 里打开 CPP_HealthComponent.h 的 C++ 代码截图，类声明为 UCPP_HealthComponent，继承自 UActorComponent，并带有可蓝图挂载组件与蓝图类型的宏；属性有 float MaxHealth = 3.0f、float CurrentHP 和 bool bIsDefeated = false；下方 DecreaseHealth 函数接收一个 float InComingDamage 参数，函数体里用 FMath::Max 把扣除后的血量夹在零以上，血量归零时把 bIsDefeated 置为 true 并输出一条日志" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  血量组件，逻辑短到只有三行：扣血、把下限夹在零、判断是否倒下。
+                  做成组件而不是写在角色里，是因为英雄和怪物掉血的方式完全一样，没必要各写一份；
+                  挂在组件上还有个好处，属性面板里能直接看到血量数值，调手感时不用翻代码。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dungeon-doc-05.webp" alt="VS Code 里打开 CPP_Enemy_Base.h 与 .cpp 的代码截图，类声明为 ACPP_Enemy_Base，继承自 ACPP_PaperCharacter_Base，成员有 float Damage = -1.f，以及一个用 UFUNCTION 宏修饰的重叠回调 OnHurtBoxBeginOverlap；实现里先用 Cast 确认对方是 Pawn，再用 IsA 过滤掉跟自己同类的对象，然后用 Implements 判断对方有没有实现伤害接口，最后调用 Execute_DamageInterface 把伤害值传递过去；函数里还留着一条中文的调试日志" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  怪物的命中逻辑。受击盒和对方的身体重叠时触发这个回调，
+                  然后一层层往外排除：不是角色的放过、跟自己同类的放过，
+                  确认对面实现了伤害接口之后才把伤害递出去。
+                  那句中文日志是排查碰撞时留下的，本来该删，不过留着也挺能说明当时在查什么。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dungeon-doc-06.webp" alt="VS Code 里打开 CPP_AN_CheckHitBox.h 与 .cpp 的代码截图，类声明为 UCPP_AN_CheckHitBox，继承自 UPaperZDAnimNotify，重写了 OnReceiveNotify_Implementation 函数并接收一个 UPaperZDAnimInstance 指针参数；实现里先做空指针判断，再用 GetOwningActor 拿到持有者，把它 Cast 成英雄类，最后调用英雄自己的 CheckHit 函数去检查命中盒，中间还留了一句调试用的日志" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  攻击判定的触发点，也是整套战斗里我觉得最巧的一处。
+                  这个类继承的是 PaperZD 的动画通知，挂在攻击动画的某一帧上——
+                  动画播到那里，它才去叫角色检查一次命中盒。
+                  判定跟着动画走而不是跟着计时器走，改手感就只需要在动画里挪一下通知的位置。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 导航链接 ============ -->
+          <section class="detail__section" aria-labelledby="links-title">
+            <h2 id="links-title">导航链接</h2>
+            <p>
+              项目还在开发中，工程没有传到公开仓库，也没有打包发布，所以这里没有可以点的链接。
+              想看某个类的完整实现，或者想直接要工程文件，都可以写信跟我说。
+            </p>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">代码仓库</dt>
+                <dd class="spec__value">暂无公开仓库</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">打包发布</dt>
+                <dd class="spec__value">暂未发布</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">源码说明</dt>
+                <dd class="spec__value">项目还在开发中</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 翻页导航 ============ -->
+          <nav class="pager" aria-label="作品之间切换">
+            <a class="pager__link pager__link--prev" href="ue2d.html" aria-label="上一个作品：UE 2D 游戏">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+              上一项
+            </a>
+            <a class="pager__link pager__link--back" href="../index.html#works">返回作品列表</a>
+            <a class="pager__link pager__link--next" href="minesweeper.html" aria-label="下一个作品：扫雷">
+              下一项
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__text">© 2026 3445229764@qq.com · 保留所有权利</p>
+      <a class="link-more" href="../index.html#top">回到首页</a>
+    </div>
+  </footer>
+
+  <script src="../js/modules/menu.js"></script>
+  <script src="../js/modules/scroll.js"></script>
+  <script src="../js/modules/form.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

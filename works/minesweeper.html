@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>扫雷 — Achernar</title>
+  <meta name="description" content="用 C++ 写在控制台里的扫雷，是我入门游戏开发的第一个项目：二维数组存地图、按难度映射雷数，通过输入坐标来完成操作。">
+  <meta name="theme-color" content="#f9f7f4">
+
+  <link rel="icon" href="../assets/icons/icon-a.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/icons/icon-a.png" type="image/png" sizes="64x64">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+
+  <!-- ============ 顶部导航 ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="logo" href="../index.html">
+        <img class="logo__mark" src="../assets/images/logo.webp" alt="" width="633" height="633" loading="lazy" decoding="async">
+        <span class="logo__text">Achernar</span>
+      </a>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="visually-hidden">展开导航菜单</span>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+
+        <ul class="nav__list" id="nav-menu" data-open="false">
+          <li><a class="nav__link" href="../index.html#works">作品</a></li>
+          <li><a class="nav__link" href="../index.html#about">关于</a></li>
+          <li><a class="nav__link" href="../index.html#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="section">
+      <div class="container">
+        <!-- ============ 详情头部 ============ -->
+        <header class="detail__head">
+          <p class="section__eyebrow">Case 01 / 08</p>
+          <h1 class="detail__title">扫雷</h1>
+          <ul class="tag-list detail__tags">
+            <li class="tag">C++</li>
+            <li class="tag">控制台</li>
+            <li class="tag">二维数组</li>
+            <li class="tag">面向对象</li>
+          </ul>
+          <p class="detail__lead">
+            尝试的第一个游戏项目，通过输入坐标来完成操作。规则照搬经典扫雷，重点是把面向对象和多文件开发练一遍。
+          </p>
+
+          <dl class="spec-list detail__meta">
+            <div class="spec">
+              <dt class="spec__key">时间</dt>
+              <dd class="spec__value">2026 年 2 月</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">角色</dt>
+              <dd class="spec__value">独立开发， A 辅助</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">开发环境</dt>
+              <dd class="spec__value">Visual Studio 2022</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">状态</dt>
+              <dd class="spec__value">可运行/暂停更新</dd>
+            </div>
+          </dl>
+        </header>
+
+        <div class="detail__body">
+          <!-- ============ 概览与技术栈 ============ -->
+          <section class="detail__section" aria-labelledby="overview-title">
+            <h2 id="overview-title">概览与技术栈</h2>
+            <p>
+              这是我真正意义上动手写的第一个游戏项目。规则照搬经典扫雷——翻开格子、避开地雷、靠周围数字推断
+              雷的位置——只是把画面换成了控制台：地图用字符打印出来，操作靠输入坐标完成，比如
+              <code>&gt; x y</code> 翻开一格、<code>* x y</code> 插旗、输入 0 退出。
+            </p>
+            <p>
+              做完回头看，这个项目最大的收获其实不是扫雷本身，而是第一次把「面向对象」和「多文件」用起来。
+              以前写代码都是把所有代码堆在 main 或者同一个文件自定义的函数里，这次把地图相关的逻辑收进一个 mapBuild 类，类的声明写在
+              头文件、实现写在源文件，改一处逻辑不用再从头翻到尾。
+            </p>
+            <p>
+              毛病也不少。随机布雷用的是 <code>srand(time(0))</code> 加 <code>rand()</code>，同一秒内重开会
+              得到一样的地图；输入的容错做得很少，乱输坐标会把程序带进一个奇怪的状态。不过它至少能完整跑完
+              一局，把「输入 → 处理 → 输出」这条链走通了。
+            </p>
+
+            <h3>技术栈</h3>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">语言</dt>
+                <dd class="spec__value">C++（控制台程序，无图形界面）</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">数据结构</dt>
+                <dd class="spec__value">二维数组存地图，枚举与结构体定义格子类型</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">难度选择</dt>
+                <dd class="spec__value">按难度映射到不同的地图边长与雷数</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">架构</dt>
+                <dd class="spec__value">面向对象 + 多文件</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">工具</dt>
+                <dd class="spec__value">Visual Studio 2022</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 截图与演示 ============ -->
+          <section class="detail__section" aria-labelledby="shots-title">
+            <h2 id="shots-title">截图与演示</h2>
+            <p>
+              下面三张是实际运行时的控制台画面，按一局游戏的顺序排：先选难度，再看清指令格式，然后进入对局。
+            </p>
+
+            <div class="gallery">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/minesweeper-demo-01.webp" alt="难度选择菜单，列出简单、一般、困难、返回四项，底部提示输入数字选择" width="419" height="288" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  开局先选难度，三档对应不同的地图边长和雷数，0 是返回。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/minesweeper-demo-02.webp" alt="游戏开始界面，显示初始地图和三条指令格式说明，底部等待输入操作" width="509" height="668" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  每次进入对局都会把指令格式打印一遍，省得记不住 <code>&gt; x y</code> 和 <code>* x y</code> 的区别。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/minesweeper-demo-03.webp" alt="对局中的控制台画面，安全区已发现 84 格，翻开的格子显示出 0、1、2 等周围雷数" width="499" height="492" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  对局中：翻开的格子显示周围雷数，顶部同步更新安全区已发现的格数。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 技术文档 ============ -->
+          <section class="detail__section" aria-labelledby="docs-title">
+            <h2 id="docs-title">技术文档</h2>
+            <p>
+              代码量不大，但有三处是当时反复改过的：难度映射表、类的成员划分、以及地图的初始化与布雷。
+              下面三张就是这三部分的代码截图，完整实现放在仓库里。
+            </p>
+            <p>
+              现在再看这套划分还将就，但想加一个「撤销上一步」
+              就得同时动好几个成员函数。如果重写一遍，我会使用MVC架构。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/minesweeper-doc-01.webp" alt="C++ 代码截图：getMapDifficulty 函数用 switch 按难度返回不同的地图边长与雷数" width="760" height="327" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  难度映射：地图边长和雷数由这一个函数决定，用 switch 写成一张表，以后想加难度只要补一个分支。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/minesweeper-doc-02.webp" alt="C++ 代码截图：mapBuild 类的成员函数声明，分为私有与公有两部分" width="901" height="315" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  类的划分：内部计算都放在私有成员里，对外只留打印地图和构建地图两个入口。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/minesweeper-doc-03.webp" alt="C++ 代码截图：emptyMap 用双层循环初始化地图状态，setBomb 用 rand 随机布雷" width="957" height="801" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  初始化与布雷：空地图用双层循环把所有状态数组清成初值，布雷则是随机取位置，撞到非空格就重取。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 导航链接 ============ -->
+          <section class="detail__section" aria-labelledby="links-title">
+            <h2 id="links-title">导航链接</h2>
+            <ul class="link-list">
+              <li>
+                <a class="link-more" href="https://github.com/AchernarX11/-CPP-Minesweeper">
+                  代码仓库
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M5 12h14M13 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <!-- ============ 翻页导航 ============ -->
+          <nav class="pager" aria-label="作品之间切换">
+            <a class="pager__link pager__link--prev" href="dungeon.html" aria-label="上一个作品：地牢">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+              上一项
+            </a>
+            <a class="pager__link pager__link--back" href="../index.html#works">返回作品列表</a>
+            <a class="pager__link pager__link--next" href="maze.html" aria-label="下一个作品：迷宫">
+              下一项
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__text">© 2026 3445229764@qq.com · 保留所有权利</p>
+      <a class="link-more" href="../index.html#top">回到首页</a>
+    </div>
+  </footer>
+
+  <script src="../js/modules/menu.js"></script>
+  <script src="../js/modules/scroll.js"></script>
+  <script src="../js/modules/form.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

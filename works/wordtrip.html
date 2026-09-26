@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>词途奇遇 — Achernar</title>
+  <meta name="description" content="一个靠拼写英文单词来打怪的纯前端网页游戏，用来帮助记忆单词。全部代码由 AI 生成，我负责提需求与验收——这是我第一次完整走完一个多模块项目。">
+  <meta name="theme-color" content="#f9f7f4">
+
+  <link rel="icon" href="../assets/icons/icon-a.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/icons/icon-a.png" type="image/png" sizes="64x64">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+
+  <!-- ============ 顶部导航 ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="logo" href="../index.html">
+        <img class="logo__mark" src="../assets/images/logo.webp" alt="" width="633" height="633" loading="lazy" decoding="async">
+        <span class="logo__text">Achernar</span>
+      </a>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="visually-hidden">展开导航菜单</span>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+
+        <ul class="nav__list" id="nav-menu" data-open="false">
+          <li><a class="nav__link" href="../index.html#works">作品</a></li>
+          <li><a class="nav__link" href="../index.html#about">关于</a></li>
+          <li><a class="nav__link" href="../index.html#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="section">
+      <div class="container">
+        <!-- ============ 详情头部 ============ -->
+        <header class="detail__head">
+          <p class="section__eyebrow">Case 03 / 08</p>
+          <h1 class="detail__title">词途奇遇</h1>
+          <ul class="tag-list detail__tags">
+            <li class="tag">Vibe Coding</li>
+            <li class="tag">前端</li>
+            <li class="tag">原生 JavaScript</li>
+			<li class="tag">css</li>
+          </ul>
+          <p class="detail__lead">
+            一个靠拼写英文单词来打怪的网页游戏，用来帮我记单词。它更像一次实验：我想知道把需求讲清楚之后，
+            AI 到底能把一个完整项目做到什么程度——代码基本是它写的，需求拆解和验收是我的活。
+          </p>
+
+          <dl class="spec-list detail__meta">
+            <div class="spec">
+              <dt class="spec__key">时间</dt>
+              <dd class="spec__value">2025 年 10 月</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">角色</dt>
+              <dd class="spec__value">Vibe Coding：提需求与验收，代码由 AI 生成</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">开发环境</dt>
+              <dd class="spec__value">Trae</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">状态</dt>
+              <dd class="spec__value">可运行/暂停更新</dd>
+            </div>
+          </dl>
+        </header>
+
+        <div class="detail__body">
+          <!-- ============ 概览与技术栈 ============ -->
+          <section class="detail__section" aria-labelledby="overview-title">
+            <h2 id="overview-title">概览与技术栈</h2>
+            <p>
+              玩法很简单：每回合屏幕上给出几个中文释义，把对应的英文单词拼出来，就能对怪物造成伤害；
+              拼错或者拼不出来，就轮到怪物反击。规则不新鲜，但拼写这件事必须自己动手完成，比一遍遍
+              看单词表印象深得多——至少对我自己是这样的。
+            </p>
+            <p>
+              做它的真正动机不是背单词。2025 年下半年「vibe coding」这个词刚出现，我想知道把功能描述
+              清楚之后，AI 能把一个完整项目推到什么程度。做完的结论是：它能做的比我当时自己写的多得多，
+              但前提是我得先把话说清楚——需求模糊的地方，它给的代码也就是模糊的。
+            </p>
+            <p>
+              整个项目是纯前端，没有任何后端和构建工具，所有逻辑都跑在浏览器里；代码拆成了 15 个原生
+              JavaScript 模块，靠全局模块对象串起来。自定义单词表、养成进度和排行榜都存在 localStorage 里，
+              关掉页面再打开还在。这也是我第一次接触「自己的数据怎么持久化」这个问题。
+            </p>
+            <p>
+              这段经历对我最大的影响不在这个游戏本身，而是两件后来一直在用的能力：一是把一个大功能拆成
+              一句能说清的小需求；二是读别人写的代码——中间有几次 AI 改坏了一个函数，json配置不上，只展示默认的单词，我得自己找出是哪一步
+              开始不对，这比从头写一遍更锻炼人。
+            </p>
+
+            <h3>技术栈</h3>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">运行方式</dt>
+                <dd class="spec__value">纯前端网页游戏，不需要后端，也不需要构建工具</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">代码组织</dt>
+                <dd class="spec__value">15 个原生 JavaScript 模块，无框架，通过全局模块对象调用</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">数据存储</dt>
+                <dd class="spec__value">localStorage 保存自定义单词、养成进度与排行榜</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">音频</dt>
+                <dd class="spec__value">菜单与战斗两套背景音乐，带淡入淡出与音量设置</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">工具</dt>
+                <dd class="spec__value">Trae</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 截图与演示 ============ -->
+          <section class="detail__section" aria-labelledby="shots-title">
+            <h2 id="shots-title">截图与演示</h2>
+            <p>
+              截图按当时的测试顺序排下来：主菜单、养成面板、遭遇怪物，接着是一段实际战斗的录屏，
+              最后是素材图鉴和结算统计。视频默认不加载也不自动播放，点了播放按钮才会开始下载。
+            </p>
+
+            <div class="gallery">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/wordtrip-demo-01.webp" alt="词途奇遇主菜单，标题下方是开始冒险、背包、排行榜、养成系统、设置五个入口，右侧面板里有一个昵称输入框和橙色的开始冒险按钮" width="1207" height="709" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  主菜单：填个昵称就能开局。五个入口里，「背包」当时还只做了壳子。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/wordtrip-demo-02.webp" alt="养成系统面板，左侧显示玩家等级 1、当前经验 0、金币 0，右侧是攻击力升级、生命上限升级、暴击率升级、抗性升级四张卡片，每张带当前等级、当前值与下一级效果" width="1172" height="1290" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  养成系统：攻击力、生命上限、暴击率、抗性四类各 10 级，用打怪赚的经验点换。
+                  暴击率和抗性卡了 50% 的上限，不然堆起来就没边了。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/wordtrip-demo-03.webp" alt="遭遇怪物界面，中间是发着光的黑影怪物立绘，右侧列出怪物名称、等级 2、血量 100、攻击 19 与回合单词数 2 个，下方有发起攻击、拒绝战斗、查看信息、退出游戏四个按钮" width="1150" height="1056" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  遭遇怪物：数量、攻击力和这一回合要拼几个单词全都跟着等级走。可以打、可以拒绝，
+                  也可以先看看它的信息再决定，拒绝战斗的成功的概率有60%，类似于宝可梦吧。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural shot--portrait">
+                <div class="shot__frame">
+                  <video class="shot__video" src="../assets/video/wordtrip-demo-04.mp4" poster="../assets/images/wordtrip-cover.webp" width="1166" height="1374" controls preload="none" playsinline>
+                    你的浏览器不支持 HTML5 视频，无法在这里播放这段录屏。
+                  </video>
+                </div>
+                <figcaption class="shot__caption">
+                  实际战斗的一段录屏：给中文释义拼英文单词，答对造成伤害，答错挨反击。这段是竖屏录的，
+                  所以框体限了宽度，点左下角的播放按钮才开始加载。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/wordtrip-demo-05.webp" alt="怪物素材图鉴，11 张怪物立绘卡片排成网格，包括污泥史莱姆、尖牙鼠、狂暴野兔、暗影狼、火焰蜥蜴、钢铁傀儡、深渊蠕虫、雷电鸟、冰霜巨人、远古恶龙等，每张都标着图片加载成功" width="1799" height="1393" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  怪物图鉴：一共 11 种，从史莱姆一直排到远古恶龙。这一页其实是素材自检页，
+                  用来一次性确认所有立绘都加载得出来。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/wordtrip-demo-06.webp" alt="场景素材图鉴，12 张像素风战斗背景缩略图排成网格，标注了沼泽、森林、火山、地牢、洞穴、神殿遗迹、雪地等场景名称，每张里还放了主角小图作参照" width="1868" height="1379" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  场景图鉴：12 张战斗背景，每张里都放进主角小图做参照，方便比较不同场景下的比例和色调。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/wordtrip-demo-07.webp" alt="森林场景的战斗界面，像素风蓝甲骑士持剑面对一只红色巨鼠，上方战斗回合面板显示玩家等级 2、分数 225、血量 108 / 125 与经验 22 / 72" width="1065" height="901" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  森林里的战斗：血量、分数、经验都实时刷新在上方面板，不用翻别的页面就能知道这一局打得怎么样。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/wordtrip-demo-08.webp" alt="游戏结算的单词统计页，表格逐行列出 father、jump、mother、egg、dog、cat、apple、banana 等单词的中文释义、出现次数、答对次数与答错次数" width="1209" height="1223" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  结算页的单词统计：每个词出现几次、答对几次、答错几次都列出来。复习的时候就先挑
+                  答错次数多的那几个看。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 技术文档 ============ -->
+          <section class="detail__section" aria-labelledby="docs-title">
+            <h2 id="docs-title">技术文档</h2>
+            <p>
+              这个项目的代码不是我逐行写的，所以这里不贴代码截图，改说几个当时来回调整出来、
+              我觉得值得记下来的实现点。
+            </p>
+            <p>
+              <strong>随机抽词用的是洗牌，不是随机取下标。</strong>
+              每回合要从单词库里抽若干个词。词库模块用的是 Fisher-Yates 洗牌——把整个词库打乱之后取前 N 个。
+              相比「随机取下标再去重」，这样每个词被抽到的概率严格相等，也不会出现同一个词在一回合里重复出现。
+              这也是我第一次知道「随机」本身还有好坏之分。
+            </p>
+            <p>
+              <strong>自定义单词库单独用单例管理。</strong>
+              用户自己导入的单词交给一个专门的模块，用单例模式保证全局只有一份数据，从 localStorage 里读写。
+              导入时同时兼容「英文,中文」和单行英文两种格式，会自动去重，之后按难度筛选取词。
+              这是整个项目里跟用户数据打交道最多的一块，也是出错最多的一块。
+            </p>
+            <p>
+              <strong>怪物数值跟着玩家等级走。</strong>
+              生成怪物时，等级在玩家等级上下浮动一级、最低 1 级；难度由等级推出来（1 到 3）；这一回合要拼
+              几个单词又由难度决定（1 到 3 个）。也就是说打得越往后，一回合里的单词数越多——难度是长出来的，
+              不是写死的。
+            </p>
+            <p>
+              <strong>伤害由正确率换算，答错也会被记录。</strong>
+              每回合按答对的比例换算成伤害倍率，答得越准打得越狠。同时每个单词的出现次数、答对次数和答错
+              次数都会被累计下来，结算时汇总成上面那张表——这个设计是后来加的，因为发现自己总在同样的
+              几个词上翻车。
+            </p>
+            <p>
+              <strong>养成数值要有上限。</strong>
+              攻击、生命、暴击、抗性四类升级各自最多 10 级，暴击率和抗性再额外卡在 50%。加这个上限是因为
+              前期没有它的时候，把暴击堆满就变成了看动画。也是从这里开始，我意识到数值设计需要考虑「失控」。
+            </p>
+            <p>
+              <strong>音频得绕开浏览器的自动播放限制。</strong>
+              音频模块负责菜单和战斗两套背景音乐的切换，带淡入淡出和音量记忆。但浏览器不允许页面一打开
+              就出声，播放必须等到用户第一次交互之后才行。这类「浏览器不让你干的事」我原本完全不知道，
+              是 AI 在代码里加了处理、我追问才弄明白的。
+            </p>
+          </section>
+
+          <!-- ============ 导航链接 ============ -->
+          <section class="detail__section" aria-labelledby="links-title">
+            <h2 id="links-title">导航链接</h2>
+            <p>
+              这个项目目前只在我自己电脑上跑，没有公开的代码仓库，也还没有部署到线上，所以这里暂时
+              没有可以点的链接。想试玩的话可以直接找我要一份。
+            </p>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">代码仓库</dt>
+                <dd class="spec__value">暂无公开仓库</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">在线试玩</dt>
+                <dd class="spec__value">暂未部署</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 翻页导航 ============ -->
+          <nav class="pager" aria-label="作品之间切换">
+            <a class="pager__link pager__link--prev" href="maze.html" aria-label="上一个作品：迷宫">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+              上一项
+            </a>
+            <a class="pager__link pager__link--back" href="../index.html#works">返回作品列表</a>
+            <a class="pager__link pager__link--next" href="dead-silence.html" aria-label="下一个作品：死寂">
+              下一项
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__text">© 2026 3445229764@qq.com · 保留所有权利</p>
+      <a class="link-more" href="../index.html#top">回到首页</a>
+    </div>
+  </footer>
+
+  <script src="../js/modules/menu.js"></script>
+  <script src="../js/modules/scroll.js"></script>
+  <script src="../js/modules/form.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

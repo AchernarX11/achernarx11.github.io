@@ -1,0 +1,553 @@
+/* ============================================================
+   components.css — 可复用组件（按钮 / 卡片 / 标签 / 表单 / 区块标题）
+   原则：重复出现的 UI 一律抽成组件类，禁止复制粘贴
+   ============================================================ */
+
+/* ---------- 图标 ---------- */
+.icon {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  transition: var(--transition-fast);
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+/* 主按钮：暖金底 + 深色文字，保证文字对比度 4.5:1 以上 */
+.btn--primary {
+  background-color: var(--color-accent);
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn--primary:hover {
+  background-color: var(--color-accent-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--primary:active {
+  transform: translateY(-1px);
+}
+
+.btn--primary:hover .icon {
+  transform: translateX(3px);
+}
+
+/* 次按钮：描边 + 透明底 */
+.btn--ghost {
+  color: var(--color-text);
+  background-color: transparent;
+  border-color: var(--color-border);
+}
+
+.btn--ghost:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-soft);
+  transform: translateY(-2px);
+}
+
+.btn--ghost:active {
+  transform: translateY(-1px);
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background-color: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-6px);
+}
+
+/* ---------- 标签 ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-accent-soft);
+  border-radius: var(--radius-pill);
+  color: var(--color-text);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* 标签组：作品卡片与详情页共用同一套排列规则 */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+/* ---------- 键值规格清单 ---------- */
+.spec-list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.spec {
+  display: grid;
+  grid-template-columns: var(--spec-key-width) 1fr;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+
+.spec__key {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.spec__value {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+}
+
+/* ---------- 区块标题组 ---------- */
+.section__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.section__eyebrow::before {
+  content: '';
+  width: var(--space-3);
+  height: var(--underline-width);
+  background-color: var(--color-accent);
+  border-radius: var(--radius-pill);
+}
+
+.section__title {
+  max-width: var(--measure);
+}
+
+.section__lead {
+  margin-top: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--fs-lead);
+}
+
+/* ---------- 文字链接（下划线由左至右展开） ---------- */
+.link-more {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  align-self: flex-start;
+  padding-bottom: var(--space-1);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+/* 下划线由左至右展开：文字链接与详情页翻页链接共用同一套规则 */
+.link-more::after,
+.pager__link::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--underline-width);
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.link-more:hover::after,
+.link-more:focus-visible::after,
+.pager__link:hover::after,
+.pager__link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.link-more:hover .icon,
+.pager__link:hover .icon {
+  transform: translateX(3px);
+}
+
+/* ---------- 链接清单（详情页「导航链接」） ---------- */
+.link-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* ---------- 详情页翻页导航 ---------- */
+.pager {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2) var(--space-3);
+  align-items: center;
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.pager__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding-bottom: var(--space-1);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+.pager__link--prev {
+  justify-self: start;
+}
+
+.pager__link--next {
+  justify-self: end;
+}
+
+/* 移动端：上一项 / 下一项分列两端，返回列表单独占一行居中 */
+.pager__link--back {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: center;
+}
+
+/* 上一项箭头旋转 180 度指向左，hover 时向左位移 */
+.pager__link--prev .icon {
+  transform: rotate(180deg);
+}
+
+.pager__link--prev:hover .icon {
+  transform: rotate(180deg) translateX(3px);
+}
+
+@media (min-width: 640px) {
+  .pager {
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .pager__link--back {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+/* ---------- 截图画廊 ---------- */
+.gallery {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.shot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.shot__frame {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background-color: var(--color-accent-soft);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.shot__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity var(--duration-slow) var(--ease-standard);
+}
+
+/* 图片淡入：与作品卡片保持一致 */
+.js .shot__img {
+  opacity: 0;
+}
+
+.js .shot__img.is-loaded {
+  opacity: 1;
+}
+
+/* 无真实截图时的线框占位：纯色块 + 内联 SVG，不使用任何 emoji */
+.shot__placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--color-accent);
+}
+
+.shot__badge {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+}
+
+.shot__caption {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+@media (min-width: 640px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 控制台 / 代码截图：按原图比例完整显示，不裁切也不放大，避免文字发虚 */
+.shot--natural .shot__frame {
+  aspect-ratio: auto;
+}
+
+.shot--natural .shot__img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin-inline: auto;
+}
+
+/* 代码截图单列显示，框体贴住原图，避免大片留白 */
+.gallery--single {
+  grid-template-columns: 1fr;
+}
+
+.gallery--single .shot__frame {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+/* 演示视频：不自动播放，preload="none" 让首屏不去拉取视频本体；
+   width / height 属性按视频原始尺寸填写。注意未加载时浏览器按 poster 的比例排版，
+   点击播放、读到视频元数据后会切回视频自身的比例，两处比例不同则有一次高度跳变 */
+.shot__video {
+  display: block;
+  width: 100%;
+  height: auto;
+  background-color: var(--color-text);
+}
+
+/* 竖屏录屏：独占一整行并居中，同时限制宽度——
+   若让它铺满整行，高度会超过一千像素，把版面撑得很难看 */
+.shot--portrait {
+  grid-column: 1 / -1;
+}
+
+.shot--portrait .shot__frame {
+  width: fit-content;
+  max-width: var(--video-max-width);
+  margin-inline: auto;
+}
+
+/* ---------- 代码块（技术文档） ---------- */
+.code-block {
+  /* 长代码行必须在本块内横向滚动，否则会把整页撑出横向滚动条 */
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3);
+  overflow-x: auto;
+  background-color: var(--color-text);
+  border-radius: var(--radius-sm);
+  color: var(--color-bg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+  tab-size: 2;
+}
+
+/* ---------- 数据统计 ---------- */
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.stat__value {
+  color: var(--color-accent-strong);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+}
+
+.stat__label {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+/* ---------- 社交图标 ---------- */
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.social__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-5);
+  height: var(--space-5);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+.social__link:hover {
+  color: var(--color-text);
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-soft);
+  transform: translateY(-2px);
+}
+
+.social__link .icon {
+  width: var(--space-3);
+  height: var(--space-3);
+}
+
+/* ---------- 表单 ---------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.field__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+}
+
+.field__input {
+  width: 100%;
+  padding: var(--space-2);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  transition: var(--transition-fast);
+}
+
+.field__input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.field__input:hover {
+  border-color: var(--color-accent);
+}
+
+.field__input:focus-visible {
+  border-color: var(--color-accent);
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.field__error {
+  min-height: var(--space-3);
+  color: var(--color-text);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-base);
+  font-weight: var(--fw-medium);
+}
+
+.field--invalid .field__input {
+  border-color: var(--color-accent-strong);
+}
+
+/* 必填标记：用纯 CSS 绘制的圆点，不使用任何 emoji */
+.field--required .field__label::after {
+  content: '';
+  display: inline-block;
+  width: var(--space-1);
+  height: var(--space-1);
+  margin-left: var(--space-1);
+  background-color: var(--color-accent);
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.form__status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--space-3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+}
+
+.form__status[data-state='success'] {
+  color: var(--color-text);
+}
+
+.form__status[data-state='error'] {
+  color: var(--color-text);
+}
+
+.form__status .icon {
+  display: none;
+  width: var(--space-3);
+  height: var(--space-3);
+  color: var(--color-accent-strong);
+}
+
+.form__status[data-state='success'] .icon {
+  display: block;
+}

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>迷宫 — Achernar</title>
+  <meta name="description" content="用 C++ 写在控制台里的迷宫：DFS 递归回溯生成地图，无阻塞输入读取按键，再用前后双端打印消掉闪烁，前后迭代了三个版本。">
+  <meta name="theme-color" content="#f9f7f4">
+
+  <link rel="icon" href="../assets/icons/icon-a.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/icons/icon-a.png" type="image/png" sizes="64x64">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+
+  <!-- ============ 顶部导航 ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="logo" href="../index.html">
+        <img class="logo__mark" src="../assets/images/logo.webp" alt="" width="633" height="633" loading="lazy" decoding="async">
+        <span class="logo__text">Achernar</span>
+      </a>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="visually-hidden">展开导航菜单</span>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+
+        <ul class="nav__list" id="nav-menu" data-open="false">
+          <li><a class="nav__link" href="../index.html#works">作品</a></li>
+          <li><a class="nav__link" href="../index.html#about">关于</a></li>
+          <li><a class="nav__link" href="../index.html#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="section">
+      <div class="container">
+        <!-- ============ 详情头部 ============ -->
+        <header class="detail__head">
+          <p class="section__eyebrow">Case 02 / 08</p>
+          <h1 class="detail__title">迷宫</h1>
+          <ul class="tag-list detail__tags">
+            <li class="tag">C++</li>
+            <li class="tag">控制台</li>
+            <li class="tag">DFS</li>
+            <li class="tag">无阻塞输入</li>
+            <li class="tag">前后双端打印</li>
+          </ul>
+          <p class="detail__lead">
+            为了把编码能力再往上推一档而做的项目。核心是用 DFS 递归生成迷宫，之后前后迭代了三个版本，
+            也是在这里第一次碰上「键盘响应」和「刷新闪烁」这类真实问题。
+          </p>
+
+          <dl class="spec-list detail__meta">
+            <div class="spec">
+              <dt class="spec__key">时间</dt>
+              <dd class="spec__value">2026 年 3 月</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">角色</dt>
+              <dd class="spec__value">独立开发</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">开发环境</dt>
+              <dd class="spec__value">Visual Studio 2022</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">状态</dt>
+              <dd class="spec__value">可运行/暂停更新</dd>
+            </div>
+          </dl>
+        </header>
+
+        <div class="detail__body">
+          <!-- ============ 概览与技术栈 ============ -->
+          <section class="detail__section" aria-labelledby="overview-title">
+            <h2 id="overview-title">概览与技术栈</h2>
+            <p>
+              扫雷做完之后想巩固一下自己的知识，于是有了这个迷宫。地图不再是静态摆好的格子，而是每次开局都用
+              <strong>DFS 递归回溯</strong>现场挖出来：从一个起点出发，把方向数组打乱，沿着没走过的方向
+              一次跳两格挖通路，撞到底就回溯。这样每局的地图都不一样，也顺带把递归和回溯真正写了一遍。
+            </p>
+            <p>
+              缺点是地图尺寸被写死了——25 行 × 101 列，连同所有边界判定都绕不开这两个数字，改一次尺寸要
+              连着改好几处，但这是已知的最大地图了，因为dfs开销比较大，地图再大就会炸掉。这个项目的边界检查也写得格外啰嗦，每次移动前都要确认目标格不越界、并且是
+              可通行的类型，因为越界一次就会直接崩掉。
+            </p>
+            <p>
+              因为地图是实时重绘的，两个体验问题在这个项目里变得很突出，也是我花时间最多的地方：一是原来
+              用 <code>cin</code> 读输入，必须按回车才生效，走一步顿一下，后来换成了无阻塞读取键盘；二是
+              25 × 101 的地图整屏清空再重印会闪得很厉害，于是改成了前后双端打印，只重画变化的部分。
+            </p>
+
+            <h3>版本迭代</h3>
+            <p>
+              这个项目前后升了三个版本，每一版都是被「玩起来不舒服」逼出来的：
+            </p>
+            <p>
+              <strong>v2.0</strong> —— 由于版本v1.0单纯走迷宫太无聊，于是把终点从固定位置改成随机分布在地图右半区，
+              并给终点加了一个固定房间；地图上加入道具 <code>X</code>，碰到会触发随机效果；首次打开
+              地图时不再一次性铺满，而是动态生成，帮玩家快速定位起点、终点和道具的位置。
+            </p>
+            <p>
+              <strong>v3.0</strong> —— 针对 25 × 101 地图整屏重印的强烈闪烁，改用前后双端打印；同时在
+              MapBuild 类里加了 <code>mazeOptimization</code> 方法，对 DFS 生成的迷宫做二次优化，把
+              规整的走廊打散一些，路径走向更多元。
+            </p>
+
+            <h3>技术栈</h3>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">语言</dt>
+                <dd class="spec__value">C++</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">生成算法</dt>
+                <dd class="spec__value">DFS 递归回溯，按步长 2 挖路后打通中间格</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">输入</dt>
+                <dd class="spec__value">无阻塞读取按键</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">渲染</dt>
+                <dd class="spec__value">前后双端打印</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">地图规模</dt>
+                <dd class="spec__value">25 行 × 101 列</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">工具</dt>
+                <dd class="spec__value">Visual Studio 2022</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 截图与演示 ============ -->
+          <section class="detail__section" aria-labelledby="shots-title">
+            <h2 id="shots-title">截图与演示</h2>
+            <p>
+              先看规则页，再看一段实际走迷宫的录屏。视频默认不加载也不自动播放，需要点击左下角的播放按钮
+              才会开始下载。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/maze-demo-01.webp" alt="游戏规则说明界面，左侧列出 @ 是边界、# 是墙、A 是玩家、E 是终点、X 是道具，右侧是 W/S/A/D 移动与 H 退出的按键说明，下方列出道具会随机触发的效果" width="470" height="389" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  规则页把字符含义、按键和道具效果都列在了一起。这里能看到当时实现的四种道具效果。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <video class="shot__video" src="../assets/video/maze-demo.mp4" poster="../assets/images/maze-cover.webp" width="1276" height="634" controls preload="none" playsinline>
+                    你的浏览器不支持 HTML5 视频，无法在这里播放这段录屏。
+                  </video>
+                </div>
+                <figcaption class="shot__caption">
+                  实际走迷宫的一段录屏。地图上 <code>A</code> 是玩家、<code>E</code> 是终点、<code>X</code>
+                  是道具，移动时不会整屏闪一下，这就是前后双端打印的效果。玩家会一直移动直到走到了下一个路口停下。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 技术文档 ============ -->
+          <section class="detail__section" aria-labelledby="docs-title">
+            <h2 id="docs-title">技术文档</h2>
+            <p>
+              代码量比扫雷大了不少，下面挑了五处关键实现：主循环的状态机、DFS 生成迷宫、通行判定、
+              移动与道具触发、以及双端打印的同步和光标定位。完整实现放在github里。
+            </p>
+            <p>
+              现在回看，这个项目最大的教训是「要仔细做边界判定」。因为地图是动态的，玩家在移动，不同的效果盒子也会对地图做出改变，稍不注意就会报错。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/maze-doc-01.webp" alt="C++ 代码截图：主函数的 while 循环里用 switch 按 curres 状态分发到主菜单、设置菜单等分支，读取失败时清空输入缓冲并提示重新选择" width="728" height="1091" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  主循环与状态机：用 <code>curres</code> 表示当前处在哪个界面，<code>while</code> 里按状态
+                  分发；<code>std::cin &gt;&gt; choice</code> 失败时会清空缓冲、提示重新输入，而不是直接退出。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/maze-doc-02.webp" alt="C++ 代码截图：mapBuild::dfs 用递归深度优先搜索生成迷宫，方向数组随机打乱后按步长 2 挖开通路，并把两格之间的那一格也设为通路" width="1126" height="472" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  迷宫生成：方向数组先 <code>random_shuffle</code> 打乱，再沿着每个方向跳两格试探；挖通
+                  通路时把中间那一格也设成通路，迷宫才不会只剩一格宽的死胡同。越界判断写在这一层。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/maze-doc-03.webp" alt="C++ 代码截图：isPassable 先判断坐标是否越界，再判断该格类型是否为 ROAD、INTERSECTION、BOX 或 WIN" width="790" height="251" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  通行判定：这个项目对边界很敏感，所以每次移动前都要先问一遍「这格能不能走」——越界直接
+                  返回 false，不越界再看它是不是通路、岔路、道具或终点。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/maze-doc-04.webp" alt="C++ 代码截图：移动逻辑用 _kbhit 和 getkey 无阻塞读取按键，向右移动时在 while 循环里连续推进，碰到终点、道具或岔路才停下" width="898" height="873" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  移动与道具：<code>_kbhit()</code> 先问有没有按键，有才用 <code>getkey()</code> 读走，
+                  所以不用按回车。按住方向时会在 <code>while</code> 里连续推进，遇到终点、道具 <code>X</code>
+                  或岔路才停下——<code>boxEffect</code> 就是在这里被触发的。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/maze-doc-05.webp" alt="C++ 代码截图：SynchronizeMap 用双层循环把新地图逐格同步到参照地图，setCursor 调用 SetConsoleCursorPosition 把光标定位到指定坐标" width="1318" height="327" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  前后双端打印的两块基础：<code>SynchronizeMap</code> 把新地图逐格同步回参照地图，
+                  <code>setCursor</code> 调 Windows API 把光标直接定位到某个坐标。有了这两件事，重绘
+                  就不必整屏清空再打印，闪烁随之消失。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 导航链接 ============ -->
+          <section class="detail__section" aria-labelledby="links-title">
+            <h2 id="links-title">导航链接</h2>
+            <ul class="link-list">
+              <li>
+                <a class="link-more" href="https://github.com/AchernarX11/-cpp-Maze">
+                  代码仓库
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M5 12h14M13 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <!-- ============ 翻页导航 ============ -->
+          <nav class="pager" aria-label="作品之间切换">
+            <a class="pager__link pager__link--prev" href="minesweeper.html" aria-label="上一个作品：扫雷">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+              上一项
+            </a>
+            <a class="pager__link pager__link--back" href="../index.html#works">返回作品列表</a>
+            <a class="pager__link pager__link--next" href="wordtrip.html" aria-label="下一个作品：词途奇遇">
+              下一项
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__text">© 2026 3445229764@qq.com · 保留所有权利</p>
+      <a class="link-more" href="../index.html#top">回到首页</a>
+    </div>
+  </footer>
+
+  <script src="../js/modules/menu.js"></script>
+  <script src="../js/modules/scroll.js"></script>
+  <script src="../js/modules/form.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

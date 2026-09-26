@@ -1,0 +1,331 @@
+/* ============================================================
+   pages.css — 各 section 专属样式（Hero / 作品 / 关于 / 联系）
+   ============================================================ */
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: min(calc(100vh - var(--header-h)), var(--hero-ceil));
+  min-height: min(calc(100svh - var(--header-h)), var(--hero-ceil));
+  padding-block: var(--space-6);
+  overflow: hidden;
+  scroll-margin-top: var(--header-h);
+}
+
+/* 纯 SVG 装饰图形（无位图、无 emoji） */
+.hero__decor {
+  position: absolute;
+  top: 50%;
+  right: calc(-1 * var(--space-5));
+  width: 70vw;
+  max-width: 560px;
+  color: var(--color-accent);
+  transform: translateY(-50%);
+  pointer-events: none;
+  animation: hero-float 12s ease-in-out infinite;
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(-50%);
+  }
+
+  50% {
+    transform: translateY(calc(-50% - 12px));
+  }
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.hero__title {
+  margin-top: var(--space-2);
+}
+
+.hero__title-accent {
+  color: var(--color-accent-strong);
+  font-style: normal;
+}
+
+.hero__lead {
+  margin-top: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--fs-lead);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+/* ---------- 作品展示 ---------- */
+.works__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.work-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.work-card__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--color-accent-soft);
+}
+
+.work-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity var(--duration-slow) var(--ease-standard),
+    transform var(--duration-slow) var(--ease-standard);
+}
+
+/* 图片淡入：加载完成前不显示，避免生硬弹出 */
+.js .work-card__img {
+  opacity: 0;
+}
+
+.js .work-card__img.is-loaded {
+  opacity: 1;
+}
+
+.work-card:hover .work-card__img {
+  transform: scale(1.04);
+}
+
+/* 控制台截图整体偏方，等比放大铺满整个卡片；顶部对齐，
+   避免居中裁切时把最上面那行「雷数 / 插旗 / 安全区」状态栏切掉 */
+.work-card__img--top {
+  object-position: top center;
+}
+
+.work-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+}
+
+.work-card__title {
+  font-size: var(--fs-h3);
+}
+
+.work-card__desc {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.work-card__link {
+  margin-top: auto;
+}
+
+/* ---------- 关于我 ---------- */
+.about__grid {
+  display: grid;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.about__portrait {
+  overflow: hidden;
+  background-color: var(--color-accent-soft);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.about__portrait img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  transition: opacity var(--duration-slow) var(--ease-standard);
+}
+
+.js .about__portrait img {
+  opacity: 0;
+}
+
+.js .about__portrait img.is-loaded {
+  opacity: 1;
+}
+
+.about__content h2 {
+  margin-bottom: var(--space-3);
+}
+
+.about__content p + p {
+  margin-top: var(--space-2);
+}
+
+.about__content p {
+  color: var(--color-text-muted);
+}
+
+.about__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.about__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .about__stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .about__grid {
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: var(--space-6);
+  }
+}
+
+/* ---------- 联系方式 ---------- */
+.contact__grid {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+.contact__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.contact__mail {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  color: var(--color-text);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  transition: var(--transition-fast);
+}
+
+.contact__mail:hover {
+  color: var(--color-text-muted);
+}
+
+.contact__mail .icon {
+  width: var(--space-4);
+  height: var(--space-4);
+  color: var(--color-accent);
+}
+
+.contact__mail:hover .icon {
+  color: var(--color-accent-strong);
+  transform: translateX(3px);
+}
+
+.contact__note {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.contact__form-card {
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 1024px) {
+  .contact__grid {
+    grid-template-columns: 1fr 1.2fr;
+    gap: var(--space-6);
+  }
+}
+
+/* ---------- 作品详情页 ---------- */
+.detail__head {
+  max-width: var(--measure);
+}
+
+.detail__title {
+  margin-top: var(--space-3);
+}
+
+.detail__tags {
+  margin-top: var(--space-3);
+}
+
+.detail__lead {
+  margin-top: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--fs-lead);
+}
+
+.detail__meta {
+  margin-top: var(--space-4);
+}
+
+/* 详情正文与头部之间用一条分隔线断开 */
+.detail__body {
+  margin-top: var(--space-6);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.detail__section {
+  padding-block: var(--space-6);
+}
+
+.detail__section + .detail__section {
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.detail__section h2 {
+  margin-bottom: var(--space-3);
+}
+
+.detail__section h3 {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.detail__section p + p {
+  margin-top: var(--space-2);
+}
+
+.detail__section > p:first-of-type {
+  color: var(--color-text-muted);
+}
+
+/* ---------- 无障碍：关闭装饰动画 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero__decor {
+    animation: none;
+  }
+}

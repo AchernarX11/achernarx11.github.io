@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>死寂Demo — Achernar</title>
+  <meta name="description" content="跟着教程用引擎做完整流程的第三人称射击 Demo：用 UE5.4 蓝图把角色、动画、行为树、UI 和拾取系统串了一遍。">
+  <meta name="theme-color" content="#f9f7f4">
+
+  <link rel="icon" href="../assets/icons/icon-a.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/icons/icon-a.png" type="image/png" sizes="64x64">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+
+  <!-- ============ 顶部导航 ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="logo" href="../index.html">
+        <img class="logo__mark" src="../assets/images/logo.webp" alt="" width="633" height="633" loading="lazy" decoding="async">
+        <span class="logo__text">Achernar</span>
+      </a>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="visually-hidden">展开导航菜单</span>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+
+        <ul class="nav__list" id="nav-menu" data-open="false">
+          <li><a class="nav__link" href="../index.html#works">作品</a></li>
+          <li><a class="nav__link" href="../index.html#about">关于</a></li>
+          <li><a class="nav__link" href="../index.html#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="section">
+      <div class="container">
+        <!-- ============ 详情头部 ============ -->
+        <header class="detail__head">
+          <p class="section__eyebrow">Case 04 / 08</p>
+          <h1 class="detail__title">死寂Demo</h1>
+          <ul class="tag-list detail__tags">
+            <li class="tag">UE5</li>
+            <li class="tag">蓝图</li>
+            <li class="tag">第三人称射击</li>
+          </ul>
+          <p class="detail__lead">
+            这是我第一次把项目从零放进引擎里做。前两个作品都是控制台程序，这一版的目标不是玩法——
+            玩法是现成的——而是把 UE 的开发流程完整走一遍：角色怎么动、动画怎么混、AI 怎么追人、
+            UI 怎么接数据，每一项都是新的。
+          </p>
+
+          <dl class="spec-list detail__meta">
+            <div class="spec">
+              <dt class="spec__key">时间</dt>
+              <dd class="spec__value">2026 年 4 月</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">角色</dt>
+              <dd class="spec__value">独立开发，蓝图、动画、AI 与 UI 全部自己搭</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">开发环境</dt>
+              <dd class="spec__value">Unreal Engine 5.4</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">状态</dt>
+              <dd class="spec__value">可运行/暂停更新</dd>
+            </div>
+          </dl>
+        </header>
+
+        <div class="detail__body">
+          <!-- ============ 概览与技术栈 ============ -->
+          <section class="detail__section" aria-labelledby="overview-title">
+            <h2 id="overview-title">概览与技术栈</h2>
+            <p>
+              内容本身很普通：第三人称视角，主角拿着枪在雾里的废弃城镇和公路上走，看见的丧尸会追过来，
+              把这一章要求的数量清完就算过关。玩法是照着现成的类型做的，我练的是它背后的东西。
+            </p>
+            <p>
+              用引擎和用代码写游戏最大的区别是「话变多了」。同一个功能，以前写几行就完了，现在要在好几个
+              编辑器之间来回切：蓝图管逻辑，动画蓝图管姿势，行为树管 AI，UMG 管界面，还要达成蓝图通信，还得用动画通知
+              在动画的某一帧上插脚本。刚开始最不适应的是UE庞大的系统，不知道实现某个功能会用到什么蓝图节点，细节面板的对于设置有什么用，这点需要跟着教程一点点的熟悉。
+            </p>
+            <p>
+              具体到实现：角色这边把移动、跳跃、蹲伏、瞄准、开火、换弹、脚步、拾取、死亡都拆成了独立的
+              子图表，再用状态切换把它们串起来，不然所有节点堆在一张 EventGraph 里根本找不到线头。
+              动画这边用混合空间把「站着还是蹲着」和「朝哪个方向看」两组姿势混出来，转身和瞄准才不会硬切。
+              AI 用行为树加黑板，只在发现玩家时才追，没发现就原地等一会儿再随机挪一段。
+            </p>
+            <p>
+              做完最直接的收获是知道了「一个完整项目要经过哪些环节」，而不是只知道某个功能怎么写。
+              也第一次体会到可视化脚本的好处和坏处：改数值、看连线非常直观，但逻辑一多，图表就会连成
+              一团毛线，能不能看懂全靠命名和拆分够不够自律——这一点和控制台项目里「把函数写短」其实是
+              同一件事。
+            </p>
+
+            <h3>技术栈</h3>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">引擎</dt>
+                <dd class="spec__value">Unreal Engine 5.4</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">逻辑</dt>
+                <dd class="spec__value">蓝图，角色的 EventGraph 按功能拆成 14 张子图表</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">动画</dt>
+                <dd class="spec__value">动画蓝图 + 混合空间 + 瞄准偏移，站姿与瞄准方向分开混合</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">AI</dt>
+                <dd class="spec__value">行为树 + 黑板，按「是否发现玩家」在巡逻与追击之间切换</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">界面</dt>
+                <dd class="spec__value">UMG，负责关卡加载界面与任务提示</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">系统设计</dt>
+                <dd class="spec__value">蓝图接口 + 枚举 + 结构体，统一拾取物品的父类与类型</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">素材</dt>
+                <dd class="spec__value">以现成资产为主，这一版的重点在流程不在美术</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 截图与演示 ============ -->
+          <section class="detail__section" aria-labelledby="shots-title">
+            <h2 id="shots-title">截图与演示</h2>
+            <p>
+              这个项目的实机画面只有一张，另加一段录屏。视频默认不加载也不自动播放，点了左下角的播放按钮
+              才会开始下载，若视频加载不出来，请稍等。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dead-silence-cover.webp" alt="死寂的实机画面，第三人称视角下主角背对镜头站在雾中的废弃公路上，两旁是翻倒的车辆与枯树，左上角任务提示写着「消灭你所看见的所有丧尸 33 / 33」，右下角显示弹药 20 / 5" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  实机画面：场景是村庄，左上角是当前章节的任务进度，右下角是弹匣里的余弹。
+                  这一章要求把看见的丧尸清完。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <video class="shot__video" src="../assets/video/dead-silence-demo-01.mp4" poster="../assets/images/dead-silence-cover.webp" width="2560" height="1600" controls preload="none" playsinline>
+                    你的浏览器不支持 HTML5 视频，无法在这里播放这段录屏。
+                  </video>
+                </div>
+                <figcaption class="shot__caption">
+                  一段实际游玩的录屏：走位、瞄准、开火、换弹，以及丧尸发现玩家之后追过来的整个过程。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 技术文档 ============ -->
+          <section class="detail__section" aria-labelledby="docs-title">
+            <h2 id="docs-title">技术文档</h2>
+            <p>
+              这个项目没有代码可以贴——逻辑全做在蓝图里。下面八张是各模块在编辑器里的样子，
+              每一张配一句当时为什么这么做。
+            </p>
+            <p>
+              回头看，这个项目最值得记下来的不是某个节点的用法，而是「一个功能应该拆到多细」这件事。
+              拆得太粗，一张图里全是连线；拆得太细，又到处是只调用一次的小函数。
+              我最后是按「功能实现」定的标准：确定好每一个图表要实现的功能，互不污染。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dead-silence-doc-01.webp" alt="角色蓝图的事件图表清单，列出 EventGraph 与视觉控制、角色移动、角色跳跃、角色蹲伏、武器切换、状态切换、角色瞄准、瞄准切换、角色射击、开火模式、换弹、脚步声、拾取系统、死亡系统共十四张子图表" width="600" height="526" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  角色的图表清单。刚开始所有节点都堆在一张 EventGraph 里，连到后面自己都看不懂，
+                  后来按功能拆成了这十几张子图表，哪一块出问题就点进哪一张。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dead-silence-doc-02.webp" alt="角色蓝图的函数清单，包含 Construction Script、State_Change、Jump About、Footsteps_Judge、PickUp、MainWeaponGeneration、SecondaryWeaponGeneration、LostWeapon、准星扩散减小与准星扩散增加" width="589" height="367" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  函数清单。可复用的计算都写成了函数：主副武器的生成、武器丢失、准星扩散的增减，
+                  还有脚步落地的判定。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dead-silence-doc-03.webp" alt="Unreal 引擎里的 UMG 关卡加载界面编辑器，画布上叠着背景图、排版居中的章节标题「第一章：清道夫」、任务说明「消灭所有丧尸」，以及右下角的「载入关卡中…」提示，左侧面板列出画布、图片与多个文本块控件" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  关卡加载界面是用 UMG 摆的：背景图上一层章节标题「第一章：清道夫」，一层任务说明，
+                  右下角放加载提示。摆的时候才知道 UI 得按屏幕比例设锚点，不然换个分辨率位置就全跑了。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dead-silence-doc-04.webp" alt="动画蓝图的 AnimGraph 与详情面板，图表里是一组状态机节点与播放节点，右侧列出 Speed、Direction、Yaw、Pitch、武器瞄准方向以及 IfInSky、IfJump、IfCrouch、IfUseWeapon、IfAim、IfShoot、IfReload 等参数，右下角资源列表里是 AM_Aim、AM_Crouch、Zombie_Aiming、Zombie_Running 等动画资源" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  动画蓝图负责「什么时候播什么」。右侧那些布尔量是角色蓝图写进来的，
+                  状态机根据它们在待机、跑动、跳跃、蹲伏之间切换；速度、朝向和俯仰这几个数值
+                  则喂给混合空间，用来算出当前姿势。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dead-silence-doc-05.webp" alt="丧尸的行为树，根节点 Selector 下分出两个判断分支，一个条件下是「追逐玩家」接 Move To 到目标位置，另一个条件下是 Wait 接随机移动，右侧黑板面板里列着 SelfActor、是否发现玩家、是否追逐玩家与目标位置四个键" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  丧尸的 AI 全在这棵树上：发现玩家就 Move To 追过去，没发现就先 Wait 一会儿再随机挪一段。
+                  黑板上的三个自定义键（是否发现玩家、是否追逐玩家、目标位置）是树和蓝图之间唯一的接口。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dead-silence-doc-06.webp" alt="拾取系统相关的资产列表，包括蓝图类 BP_PickableItems_Father、蓝图接口 BP_PickUpSystem、枚举 Enum_ClothType、Enum_PickUpType、Enum_WeaponType，以及结构体 Struct_PickUp" width="1125" height="342" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  拾取系统：一个蓝图接口、三个枚举、一个结构体，外加所有物品共用的父类。
+                  类型用枚举区分，拾取时要传的数据打包成结构体——这是项目里唯一一处先设计再动手的地方，
+                  也是最省事的一处。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dead-silence-doc-07.webp" alt="瞄准偏移资源的编辑界面，左侧参数面板里给水平轴 Yaw 与垂直轴 Pitch 各设了 -90 到 90 的范围，下方网格中采样了上、下、左、右、中五个方向的角色姿势，中间是角色预览窗口" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  瞄准偏移是一张姿势表：上下左右中五个方向各采一个姿势，中间的角度由引擎插值。
+                  有了它，上半身跟着准星转的时候不用为每个角度都单独做动画。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/dead-silence-doc-08.webp" alt="蓝图文件夹里的动画通知类，左侧是瞄准偏移 AO_Aim，右侧依次是 BP_Footsteps_L、BP_Footsteps_R、BP_MainWeapon_AnimNotify、BP_Reload_1_AnimNotify、BP_Reload_2_AnimNotify、BP_Reload_3_AnimNotify 与 BP_SecondaryWeapon_AnimNotify" width="1103" height="327" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  脚步、换弹、开火这类「动画演到某一帧要触发的逻辑」都交给动画通知。
+                  左右脚拆成两个通知，踩地那一下的声效才不会串在一起。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 导航链接 ============ -->
+          <section class="detail__section" aria-labelledby="links-title">
+            <h2 id="links-title">导航链接</h2>
+            <p>
+              这个项目目前只在我自己电脑上跑，没有公开的代码仓库，也还没有打包发布，所以这里暂时
+              没有可以点的链接。想看看的话可以直接找我要工程文件。
+            </p>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">代码仓库</dt>
+                <dd class="spec__value">暂无公开仓库</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">打包发布</dt>
+                <dd class="spec__value">暂未发布</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 翻页导航 ============ -->
+          <nav class="pager" aria-label="作品之间切换">
+            <a class="pager__link pager__link--prev" href="wordtrip.html" aria-label="上一个作品：词途奇遇">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+              上一项
+            </a>
+            <a class="pager__link pager__link--back" href="../index.html#works">返回作品列表</a>
+            <a class="pager__link pager__link--next" href="deep-sea-shipping.html" aria-label="下一个作品：深海航运">
+              下一项
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__text">© 2026 3445229764@qq.com · 保留所有权利</p>
+      <a class="link-more" href="../index.html#top">回到首页</a>
+    </div>
+  </footer>
+
+  <script src="../js/modules/menu.js"></script>
+  <script src="../js/modules/scroll.js"></script>
+  <script src="../js/modules/form.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

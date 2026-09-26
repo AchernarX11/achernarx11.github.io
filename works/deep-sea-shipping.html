@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>深海航运 — Achernar</title>
+  <meta name="description" content="一款 HD2D 俯视视角的潜艇生存 Demo：在几乎全黑的海底靠声纳摸索前行，同时管理船壳、进水、氧气、电力与武器。用 Godot 4.7 开发，代码主要由 AI 生成，人负责数值与拍板。">
+  <meta name="theme-color" content="#f9f7f4">
+
+  <link rel="icon" href="../assets/icons/icon-a.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/icons/icon-a.png" type="image/png" sizes="64x64">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+
+  <!-- ============ 顶部导航 ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="logo" href="../index.html">
+        <img class="logo__mark" src="../assets/images/logo.webp" alt="" width="633" height="633" loading="lazy" decoding="async">
+        <span class="logo__text">Achernar</span>
+      </a>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="visually-hidden">展开导航菜单</span>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+
+        <ul class="nav__list" id="nav-menu" data-open="false">
+          <li><a class="nav__link" href="../index.html#works">作品</a></li>
+          <li><a class="nav__link" href="../index.html#about">关于</a></li>
+          <li><a class="nav__link" href="../index.html#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="section">
+      <div class="container">
+        <!-- ============ 详情头部 ============ -->
+        <header class="detail__head">
+          <p class="section__eyebrow">Case 05 / 08</p>
+          <h1 class="detail__title">深海航运</h1>
+          <ul class="tag-list detail__tags">
+            <li class="tag">Vibe Coding</li>
+            <li class="tag">Godot 4</li>
+            <li class="tag">HD2D</li>
+            <li class="tag">MCP</li>
+          </ul>
+          <p class="detail__lead">
+            一款 HD2D 俯视视角的潜艇生存 Demo：在几乎一片漆黑的海底靠声纳摸索前行，同时管理船壳、
+            进水、氧气、电力与武器，穿越深海抵达终点站。这是目前我参与过的最完整的一个项目之一，
+            也是第一次让 AI 通过 MCP 直接操作引擎来写代码，接节点。
+          </p>
+
+          <dl class="spec-list detail__meta">
+            <div class="spec">
+              <dt class="spec__key">时间</dt>
+              <dd class="spec__value">2026 年 8 月</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">团队</dt>
+              <dd class="spec__value">TransformGame 游戏工作室：肖诗益、廖雅婕（指导老师：李晨曦）</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">角色</dt>
+              <dd class="spec__value">Vibe Coding：与队友共同完成策划与关键决策，逐条审核 AI 产出并调数值</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">开发环境</dt>
+              <dd class="spec__value">Godot 4.7 + Trae IDE Godot MCP 插件</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">状态</dt>
+              <dd class="spec__value">可运行，参赛 Demo，版本 0.5.17-Beta.2/暂停更新</dd>
+            </div>
+          </dl>
+        </header>
+
+        <div class="detail__body">
+          <!-- ============ 概览与技术栈 ============ -->
+          <section class="detail__section" aria-labelledby="overview-title">
+            <h2 id="overview-title">概览与技术栈</h2>
+            <p>
+              玩法一句话能说完：你是一艘深海潜艇的船长，屏幕上除了自己船上的灯，几乎什么都看不见，
+              只能主动开声纳扫一圈，靠回声和雷达盘判断礁石、怪物和终点站在哪儿，然后在氧气用完之前
+              开到终点站去。船壳会破、会进水、会下沉，电力会停，进水超过一半就开始耗氧——
+              这几件事串在一起，逼着你在「继续往前」和「停下来修」之间做选择。
+            </p>
+            <p>
+              这个项目和前面几个最大的不同是它的组织方式。它不是「我用 AI 写了个游戏」，
+              而是先把开发流程本身设计了一遍：全项目强制 MVC 分层，每个模块都是
+              Model（纯数据与计算）/ View（只负责渲染）/ Controller（读输入、驱动 Model）三件套，
+              数据流只允许「输入 → Controller → Model → View」，不许跳层；物理公式、参数范围、
+              硬约束全部写成规则文件放在 <code>.trae/rules/</code> 下，AI 每改一次代码之前先读规则；
+              代码里可调的值标 <code>↓↓↓</code>、锁死不许动的值标 <code>#不可修改</code>。
+              有了这套约束，AI 才能在没有人在旁边盯着的时候，也写出风格一致的代码。
+            </p>
+            <p>
+              技术上另一个比较特别的地方是物理和碰撞都没用引擎自带的那套。所有能动的实体——玩家潜艇、
+              怪物——走的是同一套自己写的「七步积分」：推力、线性水阻、洋流力合成加速度，更新速度，
+              限速，再更新位置；碰撞也是脚本里自己实现的，用分离轴定理做 OBB 矩形检测，
+              算出穿透法线和深度再弹开。这么做一开始是为了可控，后来发现好处是手感真的能一点点调出来——
+              船的惯性、洋流推着你偏航的感觉，都在几个参数里。
+            </p>
+
+            <h3>技术栈</h3>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">引擎</dt>
+                <dd class="spec__value">Godot 4.7</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">架构</dt>
+                <dd class="spec__value">全项目强制 MVC 三层，数据流不得跳层</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">物理</dt>
+                <dd class="spec__value">脚本自实现的七步积分，不使用引擎刚体</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">碰撞</dt>
+                <dd class="spec__value">自实现 SAT / OBB 分离轴检测，低弹性响应</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">呈现</dt>
+                <dd class="spec__value">HD2D：3D 节点承载 2D 贴图，相机垂直俯拍，z 只用来分层</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">核心玩法</dt>
+                <dd class="spec__value">声纳：视野遮罩 shader + 雷达盘 + 扫描波与光斑</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">AI 工具</dt>
+                <dd class="spec__value">Godot MCP 插件 + 规则文件，主模型 DeepSeek v4 Pro</dd>
+              </div>
+            </dl>
+
+            <h3>团队分工</h3>
+            <p>
+              文档里把「怎么写对」和「数值定多少」明确分给了两边，这条线是整个流程能跑起来的关键：
+            </p>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">写逻辑</dt>
+                <dd class="spec__value">AI：按 MVC 与规则文件生成各模块的 Model / View / Controller</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">审核与修正</dt>
+                <dd class="spec__value">人：逐条读 AI 生成的代码，查是否合规则、有没有 bug、有没有跳层</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">调数值</dt>
+                <dd class="spec__value">人：在 Inspector 里调可调参数，稳定后回填到数值配置表</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">关键决策</dt>
+                <dd class="spec__value">人：玩法设计、系统架构、内容取舍、版本调优全部由团队拍板</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 截图与演示 ============ -->
+          <section class="detail__section" aria-labelledby="shots-title">
+            <h2 id="shots-title">截图与演示</h2>
+            <p>
+              依次是主视觉、开局的新手引导、声纳雷达盘，以及一段实际游玩的录屏。视频默认不加载也不
+              自动播放，点了播放按钮才开始下载——这段录屏接近 170MB，需要等一会儿。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/deep-sea-shipping-cover.webp" alt="深海航运的主视觉，画面是一整片漆黑的深海，正中偏上是锈迹斑斑的标题「深海航运 / DEEP SEA SHIPPING demo」与锚形徽记，下方一艘潜艇的侧影，船身写着深海航运，右侧暗处藏着一条眼睛发红光的巨大海怪" width="1672" height="941" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  主视觉：整片画面几乎全黑，只有潜艇的探照灯和船身标识亮着，右边暗处那条东西
+                  其实一直在看着你。游戏里的可见范围就是这个感觉。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/deep-sea-shipping-demo-01.webp" alt="开局的新手引导画面，左侧是脸上带着油污的机械师立绘，中央一个 Q 键图标，下方对话框里写着「终于找到了，这里有一些电焊枪，可以修复船壳，但是没有多少了，你得注意左上角船壳状态，长按 Q 即可修复」，屏幕左上角是潜艇与船壳状态图标，右上角是氧气瓶图标" width="2559" height="1511" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  开局引导：修船壳用的是电焊，工具数量有限，所以长按 Q 之前得先想清楚值不值。
+                  引导期间只放行当前该按的那个键，长按 G 可以跳过。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/deep-sea-shipping-demo-02.webp" alt="声纳雷达盘界面，屏幕中央是一个占满画面的大雷达盘，外圈刻着 12 个钟点刻度，一圈青绿色扫描波正在转，中心是玩家潜艇与白色推力箭头，右上方向散落着几簇金黄色的礁石光斑，远处标记着终点站 Kyra-Nthal 与 1635m 的距离，右下角显示下潜速度 18.3 km/h、航行速度 -4.3 km/h、深度 4232.6 米" width="2559" height="1510" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  声纳雷达盘：金黄的是礁石，红的是怪物，终点站标记上还带着距离。开声纳会强制把
+                  雷达放大到最远——代价是这一刻怪物也更容易发现你。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/deep-sea-shipping-demo-03.webp" alt="被寄生虫拖拽的实战画面，漆黑的海水中只能看见自己的潜艇，舷窗透出黄色灯光，几条紫色触手从下方缠住船身，上方飘着一片血迹与准星，左上角船壳血量条已经变红，底部是船员的聊天框文字，右下角显示下潜速度 10.2 km/h、航行速度 -7.8 km/h、深度 4223.3 米与三个工具数量 30 / 48 / 49" width="2559" height="1509" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  被寄生虫的钩子拴住的瞬间：船壳血量已经见红，速度被砍掉一半，拖到一定距离还会被拽回去。
+                  同时聊天框里船员也在喊，这种时候就顾不上看深度了。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <video class="shot__video" src="../assets/video/deep-sea-shipping-demo-04.mp4" poster="../assets/images/deep-sea-shipping-cover.webp" width="2560" height="1440" controls preload="none" playsinline>
+                    你的浏览器不支持 HTML5 视频，无法在这里播放这段录屏。
+                  </video>
+                </div>
+                <figcaption class="shot__caption">
+                  一段实际游玩的录屏：开声纳找路、绕过礁石、对付追上来的怪物，以及进水之后一边下沉
+                  一边找地方修的整个过程。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 技术文档 ============ -->
+          <section class="detail__section" aria-labelledby="docs-title">
+            <h2 id="docs-title">技术文档</h2>
+            <p>
+              这个项目的技术文档写得比较全，一共十三个章节，从目录结构、模块详解、数值配置一直到
+              硬约束清单和使用 AI 的开发方法。完整版放在下面可以下载，这里挑几处我觉得最值得讲的。
+            </p>
+            <p>
+              <strong>MVC 分层是硬规定，不是建议。</strong>
+              每个功能模块都拆成三个文件：Model 是纯数据加计算，不允许引用任何节点；View 只读 Model
+              渲染，不许写 Model、也不许读输入；Controller 读输入、更新 Model，再调 View 同步。
+              数据流只允许一条路——输入 → Controller → Model → View，禁止跳层。这么定是因为 AI 很容易
+              「顺手」把界面逻辑和数值算在一起，等发现的时候已经拆不开了。
+            </p>
+            <p>
+              <strong>物理和碰撞都是自己写的。</strong>
+              所有移动实体走同一套七步积分：先算推力、线性水阻和洋流力的合力，除以质量得到加速度，
+              累加到速度上，限速，最后按速度更新位置。玩家额外还有进水带来的下沉力、深度积分和钩子拉力。
+              碰撞没有用引擎的刚体，而是脚本里用分离轴定理做 OBB 矩形检测，算出穿透法线和深度再弹开；
+              玩家身上挂两个矩形（主体加驾驶舱），石头和怪物是带旋转的 OBB，边界墙只把船推出去、
+              并且把朝墙的速度分量清零，防止穿墙。
+            </p>
+            <p>
+              <strong>怪物的身体是一条刚性点链。</strong>
+              每只怪物只有一个主控点，就是头——物理、洋流、行为决策全都只驱动头部；身体各段纯被动跟随，
+              而且是「前一段的尾接后一段的头」，同一个世界点，不留缝隙、没有弹簧也没有阻尼。
+              仔细看那些大家伙游起来像一节一节的，就是这个结构做出来的效果。肢体挂在指定身体段上，
+              按速度做正弦摆动，前后肢反相。
+            </p>
+            <p>
+              <strong>声纳既是玩法也是渲染。</strong>
+              屏幕上看不见远处，是因为挂了一张全屏遮罩：以玩家在屏幕上的位置为圆心，半径内清晰、
+              越往外越黑，两个半径都是可调参数。按 D 开声纳之后，雷达盘强制显示、相机拉到最远，
+              盘上有大约三秒一圈的扫描波，礁石是金黄色光斑、怪物是红色小光斑、深水炸弹的光斑
+              跟着引信越闪越急，终点站标记则常亮并标出距离。停电的时候扫描会停、雷达会暗下来。
+              我最喜欢的一处是：开声纳的同时，怪物的探测范围会放大到 1.5 倍、攻击倾向直接拉满——
+              照亮别人的同时也暴露了自己。
+            </p>
+            <p>
+              <strong>一次进水会连锁成一场事故。</strong>
+              船壳破损就进水，进得越多船沉得越快，进水超过 60% 开始耗氧，氧气耗尽就是结束页。
+              灯光也跟着进水比例走：40% 以下正常，40% 到 60% 会随机闪，60% 以上换成较暗的贴图
+              并可能停电，到 90% 就必定停电、永久锁定无灯图，而且屏蔽掉后续所有闪烁触发。
+              修电之后会进入一段电力保护期，期间排水加速、屏蔽停电判定。这套状态机是后期才理清楚的，
+              在那之前各种状态互相打架，很难复现。
+            </p>
+            <p>
+              <strong>用规则文件约束 AI，是这个项目真正的核心方法。</strong>
+              <code>.trae/rules/</code> 下放了四个规则文件——总览、MVC 分层、潜艇物理、怪物系统——
+              每个都是一个主题，结构固定：设计原则、目录结构、各层职责、物理公式、参数范围表、
+              硬约束、代码风格、修改前检查清单。硬约束写成「禁止……」的清单，比如玩家缩放固定
+              <code>0.05</code>「不得修改」、怪物死亡必须 <code>queue_free</code>、碰撞一律用 group
+              查找禁止硬编码节点路径。代码里还用标记区分能不能动：可调参数后面标
+              <code>↓↓↓</code>，AI 默认不碰、留给人调；锁死的值后面标 <code>#不可修改</code> 或
+              <code>#不可更改</code>。另外规定了一条：发现数值和规则对不上时先来问，不许自己顺手改。
+              这套东西写起来很枯燥，但它是「AI 在没有人在旁边时也能产出可维护代码」的前提。
+            </p>
+            <p>
+              模块之间的通信也定了统一约定：一律用 group 查找节点，禁止硬编码路径，跨模块只读对方
+              Model 上的公开字段。加一个新功能的标准做法是新建一个 <code>scripts/&lt;模块&gt;/</code>
+              目录，按 Model → View → Controller 的顺序实现，这样每个模块都能独立审核、独立测试。
+            </p>
+            <p class="shot__caption">
+              Word 文档（.docx，约 73 KB），含目录、整体架构、十三个模块详解、核心系统原理、
+              数值配置概要、硬约束清单与 AI 开发方法。
+            </p>
+            <p>
+              <a class="link-more" href="../assets/docs/deep-sea-shipping-tech-doc.docx" download>
+                下载《深海航运》完整技术文档
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M12 3v12M7 11l5 5 5-5M5 20h14"></path>
+                </svg>
+              </a>
+            </p>
+          </section>
+
+          <!-- ============ 导航链接 ============ -->
+          <section class="detail__section" aria-labelledby="links-title">
+            <h2 id="links-title">导航链接</h2>
+            <p>
+              这是参赛作品，工程文件和代码目前没有公开，也没有部署到线上，所以这里没有可以点的仓库地址。
+              想试玩或者想看某个模块的实现，可以直接找我要。
+            </p>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">代码仓库</dt>
+                <dd class="spec__value">暂无公开仓库</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">在线试玩</dt>
+                <dd class="spec__value">暂未部署</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">技术文档</dt>
+                <dd class="spec__value">见上方「技术文档」板块的下载链接</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 翻页导航 ============ -->
+          <nav class="pager" aria-label="作品之间切换">
+            <a class="pager__link pager__link--prev" href="dead-silence.html" aria-label="上一个作品：死寂">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+              上一项
+            </a>
+            <a class="pager__link pager__link--back" href="../index.html#works">返回作品列表</a>
+            <a class="pager__link pager__link--next" href="ue-template.html" aria-label="下一个作品：UE 模板复刻">
+              下一项
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__text">© 2026 3445229764@qq.com · 保留所有权利</p>
+      <a class="link-more" href="../index.html#top">回到首页</a>
+    </div>
+  </footer>
+
+  <script src="../js/modules/menu.js"></script>
+  <script src="../js/modules/scroll.js"></script>
+  <script src="../js/modules/form.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

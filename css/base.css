@@ -1,0 +1,128 @@
+/* ============================================================
+   base.css — 基础排版与全局元素
+   层级：变量 → 重置 → 【基础】 → 布局 → 组件 → 页面
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-base);
+  /* 注意：此处不使用 overflow-x: hidden，否则会破坏导航栏的 position: sticky
+     横向溢出统一由各区块自身的 overflow: hidden 收敛 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--fs-h1);
+}
+
+h2 {
+  font-size: var(--fs-h2);
+}
+
+h3 {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+}
+
+p {
+  max-width: var(--measure);
+}
+
+::selection {
+  background-color: var(--color-accent-soft);
+  color: var(--color-text);
+}
+
+/* 焦点态：键盘聚焦必须可见（鼠标点击不显示描边）
+   现代浏览器中 outline 会自动贴合元素自身的圆角，无需额外声明 */
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ---------- 跳到主内容 ---------- */
+.skip-link {
+  position: fixed;
+  top: var(--space-1);
+  left: var(--space-1);
+  z-index: var(--z-skip);
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  transform: translateY(-200%);
+  transition: var(--transition-fast);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* ---------- 仅屏幕阅读器可见 ---------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+/* ---------- 区块通用骨架 ---------- */
+.section {
+  padding-block: var(--section-y);
+  scroll-margin-top: var(--header-h);
+}
+
+/* ---------- 滚动淡入（只动画 opacity / transform） ---------- */
+/* 仅在 JS 可用时启用，避免脚本失效导致内容不可见 */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(var(--space-3));
+  transition: opacity var(--duration-slow) var(--ease-standard),
+    transform var(--duration-slow) var(--ease-standard);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

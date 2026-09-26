@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UE 模板复刻 — Achernar</title>
+  <meta name="description" content="一次用 C++ 重写 UE 第三人称模板的练手：增强输入系统接管移动与跳跃，动画蒙太奇配段通知做三段连击。Unreal Engine 5.7，独立开发。">
+  <meta name="theme-color" content="#f9f7f4">
+
+  <link rel="icon" href="../assets/icons/icon-a.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/icons/icon-a.png" type="image/png" sizes="64x64">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+
+  <!-- ============ 顶部导航 ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="logo" href="../index.html">
+        <img class="logo__mark" src="../assets/images/logo.webp" alt="" width="633" height="633" loading="lazy" decoding="async">
+        <span class="logo__text">Achernar</span>
+      </a>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="visually-hidden">展开导航菜单</span>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+
+        <ul class="nav__list" id="nav-menu" data-open="false">
+          <li><a class="nav__link" href="../index.html#works">作品</a></li>
+          <li><a class="nav__link" href="../index.html#about">关于</a></li>
+          <li><a class="nav__link" href="../index.html#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="section">
+      <div class="container">
+        <!-- ============ 详情头部 ============ -->
+        <header class="detail__head">
+          <p class="section__eyebrow">Case 06 / 08</p>
+          <h1 class="detail__title">UE 模板复刻</h1>
+          <ul class="tag-list detail__tags">
+            <li class="tag">UE5</li>
+            <li class="tag">C++</li>
+            <li class="tag">增强输入</li>
+            <li class="tag">动画蒙太奇</li>
+			<li class="tag">动画通知</li>
+          </ul>
+          <p class="detail__lead">
+            一次纯粹的练手：把 UE 自带的第三人称模板，用 C++ 从头再写一遍。目标不是做出一个游戏，
+            而是把移动、跳跃、动画和输入这几块基础的东西，从「蓝图里连过」变成「代码里写清楚」。
+            最后能跑起来的成果是一个基础移动跳跃，加一个很朴素的三段攻击。
+          </p>
+
+          <dl class="spec-list detail__meta">
+            <div class="spec">
+              <dt class="spec__key">时间</dt>
+              <dd class="spec__value">2026 年 8 月</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">团队</dt>
+              <dd class="spec__value">独立开发</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">角色</dt>
+              <dd class="spec__value">独立开发：工程结构、C++ 类、动画资产与输入配置全部自己完成</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">开发环境</dt>
+              <dd class="spec__value">Unreal Engine 5.7 + Rider</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">状态</dt>
+              <dd class="spec__value">可运行，练手工程/暂停更新</dd>
+            </div>
+          </dl>
+        </header>
+
+        <div class="detail__body">
+          <!-- ============ 概览与技术栈 ============ -->
+          <section class="detail__section" aria-labelledby="overview-title">
+            <h2 id="overview-title">概览与技术栈</h2>
+            <p>
+              做这个工程的起因挺简单：之前用引擎做东西基本都在蓝图里点，能跑起来，
+              但说不清底下发生了什么。所以这次把 UE 的第三人称模板拆开重做了一遍，
+              规定自己凡是能从 C++ 里写的，就不要用蓝图节点接。
+            </p>
+            <p>
+              输入这块换成了引擎现在主推的增强输入系统。输入动作和输入映射上下文这两个资产还是在编辑器里配，
+              但响应全部落在 C++ 的回调里：一个管移动，一个管视角，一个管攻击。
+              移动回调把二维输入拆成前后和左右两个分量，分别喂给角色移动组件的
+              <code>AddMovementInput</code>，方向取自控制器当前的朝向，这样角色本体不用转头，
+              镜头转哪儿就往哪儿走。视角回调则直接改控制器的俯仰和偏航。
+            </p>
+            <p>
+              动画这块是本工程里我花时间最多的部分。角色的动画实例每帧从角色移动组件里读速度、
+              移动方向、是否离地和跳跃初速，算好之后写成变量给混合空间用——走和跑之间的过渡
+              不是靠切换动画，而是靠混合空间按速度在两条姿势之间插值，朝向则交给方向参数。
+              连击部分没有写状态机，而是用动画蒙太奇配「段通知」：一次攻击拆成 Melee01 到 Melee03
+              三段，段的开头和结尾各挂一个通知，通知只做一件事——告诉攻击组件「连击窗口开了」或者「关了」。
+            </p>
+            <p>
+              剩下的逻辑全集中在攻击组件里。窗口开着的时候按键就把这次输入记下来，等当前这一段播完，
+              再决定要不要跳到下一段。这样攻击的节奏其实是由动画剪辑的长度决定的，
+              改手感只需要重新切动画，不用动代码。
+            </p>
+
+            <h3>技术栈</h3>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">引擎</dt>
+                <dd class="spec__value">Unreal Engine 5.7</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">语言</dt>
+                <dd class="spec__value">C++：五组类分工，玩家、控制器、动画实例、攻击组件、动画通知</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">输入</dt>
+                <dd class="spec__value">增强输入系统：输入动作与映射上下文资产 + C++ 回调绑定</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">移动</dt>
+                <dd class="spec__value">角色移动组件，速度、跳跃初速、旋转策略统一在角色构造函数里定</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">动画</dt>
+                <dd class="spec__value">混合空间做走跑与朝向，动画蒙太奇做攻击，靠段通知驱动连击窗口</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">角色资产</dt>
+                <dd class="spec__value">引擎自带的 Quinn 骨骼网格与官方动画序列，没有自制美术资源</dd>
+              </div>
+            </dl>
+
+            <h3>几个类的职责</h3>
+            <p>
+              拆得比较细，是因为我想让每个文件都短到能一眼看完：
+            </p>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">Player</dt>
+                <dd class="spec__value">构造函数里装配：加载骨骼网格、挂弹簧臂与相机、设置移动参数；输入绑定也在这里</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">PlayerController</dt>
+                <dd class="spec__value">把增强输入回调翻译成具体动作：移动、转视角、发起攻击</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">AnimInstance</dt>
+                <dd class="spec__value">每帧把速度、方向、离地状态、跳跃初速缓存成变量，供混合空间读取</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">AttackComponent</dt>
+                <dd class="spec__value">连击窗口的开关、输入缓冲、跳段与结束复位，连击的全部规则都在这里</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">AnimNotify</dt>
+                <dd class="spec__value">蒙太奇上的一颗标记，只负责按段去叫攻击组件开窗或关窗</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 截图与演示 ============ -->
+          <section class="detail__section" aria-labelledby="shots-title">
+            <h2 id="shots-title">截图与演示</h2>
+            <p>
+              这个工程没有自制美术资源，所以画面好看不到哪去，能截的主要是编辑器里的样子。
+              前两张是动画蒙太奇的编辑界面，最后是一段实际游玩的录屏。若视频无法播放，请稍等。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue-template-cover.webp" alt="UE 的动画蒙太奇编辑界面，中间是穿着白色紧身衣的 Quinn 人形骨骼网格正在预览，时间轴停在 0 秒，下方轨道里排着 Attack1、Attack2、Attack3 三段蒙太奇片段，片段起止处挂着标着 Attack1,3 与 CPP_ComboWindow 的段通知标记，右侧面板是包含三段攻击与若干移动动画的资源列表" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  攻击蒙太奇的编辑界面。一次攻击是一整段蒙太奇，里面切成三段，
+                  每段的边界上挂着 CPP_ComboWindow 段通知——连击能不能接上，就看这几个标记的位置。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue-template-demo-01.webp" alt="同一个动画蒙太奇编辑界面，时间轴前进到 0.24 秒，预览窗口里 Quinn 双臂收在胸前摆出出拳姿势，其余面板与轨道内容和上一张一致" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  同一段蒙太奇往后走了一小段。选这一帧是因为在这里能看清段通知是挂在剪辑的哪个位置上的——
+                  通知早一点或晚一点，接招的手感就完全不一样。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <video class="shot__video" src="../assets/video/ue-template-demo-02.mp4" poster="../assets/images/ue-template-cover.webp" width="2560" height="1600" controls preload="none" playsinline>
+                    你的浏览器不支持 HTML5 视频，无法在这里播放这段录屏。
+                  </video>
+                </div>
+                <figcaption class="shot__caption">
+                  一段实际游玩的录屏：先用增强输入跑动、转视角、跳一下，再连按攻击键把三段打完。
+                  最后一段之后不会接回第一段，是我故意留的——收招的过程反而更容易看清连击窗口什么时候关。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 技术文档 ============ -->
+          <section class="detail__section" aria-labelledby="docs-title">
+            <h2 id="docs-title">技术文档</h2>
+            <p>
+              这个工程没有单独的文档文件，逻辑全在 C++ 里，所以直接贴五张源码截图，
+              每张说一件事。顺序是按「一帧里数据怎么流」排的：从角色装配，到输入进来，
+              到动画实例算参数，再到攻击组件处理连击，最后是动画通知把窗口开起来。
+            </p>
+            <p>
+              工程里一共五个主要类，都带 <code>CPP_</code> 前缀，和引擎模板里的类区分开。
+              我刻意让每个文件都只做一件事：玩家类只负责装配，控制器只负责翻译输入，
+              动画实例只负责算变量，连击规则全部收在攻击组件里，动画通知本身几乎不写逻辑。
+              好处是出了问题一眼知道该翻哪个文件，坏处是文件数目变多了——
+              这个取舍我现在也没完全想好。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue-template-doc-05.webp" alt="Visual Studio 里的 CPP_Player.cpp 源码，SetupPlayerInputComponent 函数下方是 InitializeCharacter，函数体里用 ConstructorHelpers 找到引擎自带的 SKM_Quinn_Simple 骨骼网格并设置到 Mesh 上，指定相对位置与旋转，随后依次创建 SpringArm 与 Camera 并设置挂载关系，末尾一串 GetCharacterMovement 的赋值设置旋转策略、移动速度与跳跃初速" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  <code>CPP_Player::InitializeCharacter</code>：先把引擎自带的 Quinn 网格装到角色上，
+                  转正朝向、往下挪一点让脚底贴住胶囊体，再挂弹簧臂和相机。
+                  最后那一串 <code>GetCharacterMovement()</code> 赋值是故意集中写在一处的——
+                  移动速度、跳跃初速、旋转策略原本散在蓝图里，全收到构造函数里之后，
+                  改手感只需要看这一个地方。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue-template-doc-04.webp" alt="Visual Studio 里的 CPP_PlayerController.cpp 源码，依次是 MoveAction、LookAction 与 AttackAction 三个函数：MoveAction 里把二维输入取出来，按控制器当前朝向分别算出前向与右向向量，再调用 AddMovementInput 传入前后与左右两个分量；LookAction 把输入喂给 AddControllerPitchInput 与 AddControllerYawInput；AttackAction 先找到攻击组件再调用它的攻击函数" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  <code>CPP_PlayerController</code> 里的三个增强输入回调。
+                  移动这里我特意没有直接拿输入当速度，而是先按控制器朝向换成世界方向再喂给移动组件，
+                  这样角色本体不转、镜头往哪转就往哪走。攻击回调只做一件事：
+                  找到组件然后把活交给它，判断规则一概不写在控制器里。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue-template-doc-03.webp" alt="Visual Studio 里的 CPP_AnimInstance.cpp 源码，NativeInitializeAnimation 里先调用父类实现，再判断角色是不是玩家类；NativeUpdateAnimation 里取到角色移动组件后，依次把水平速度、由速度与朝向算出的移动方向、是否离地以及跳跃初速写入成员变量，最后按速度是否为零设置是否应该移动" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  <code>CPP_AnimInstance</code> 每帧做的事：把移动组件里的数据翻译成混合空间认得的四个变量。
+                  这层缓存是必要的——混合空间只认动画实例上的参数，不给它算好，
+                  蓝图里就得再连一遍计算节点。方向用的是速度方向和角色朝向的夹角，
+                  所以原地转身不会触发走路动画。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue-template-doc-02.webp" alt="Visual Studio 里的 CPP_AttackComponent.cpp 源码，OnComboWindowOpen 里打开连击窗口并检查是否有缓存的输入，OnComboWindowClose 里把窗口关掉，TryAdvanceCombo 里用一个 switch 按当前连击序号取出下一段的段名再调用 Montage_JumpToSection 跳过去，序号自增并把窗口与输入缓存复位，OnComboMontageEnded 里在蒙太奇结束时把序号清零" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  <code>CPP_AttackComponent</code>：连击的全部规则就在这几个函数里。
+                  <code>TryAdvanceCombo</code> 里那个按序号取段名的 switch 是核心——
+                  第一段接第二段、第二段接第三段，没有下一段就直接返回，所以第三段打完自然收招。
+                  跳段的动作由 <code>Montage_JumpToSection</code> 完成，
+                  代码不关心动画播到第几帧，只关心窗口开没开。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue-template-doc-01.webp" alt="Visual Studio 里的两个源码文件，上面是 CPP_AnimNotify_ComboWindow.h，声明了一个继承自动画通知的类，类里有一个可在编辑器里编辑的布尔属性表示是否开窗，以及一个重写的通知函数；下面是 CPP_AnimNotify_ComboWindow.cpp 的实现，函数里先取到网格所属的角色，再从角色身上按类找到攻击组件，按布尔属性分别调用开窗或关窗函数" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  <code>CPP_AnimNotify_ComboWindow</code>：整个连击系统里我最满意的一处。
+                  它自己没有任何状态，只有一个「开还是关」的布尔开关，
+                  挂在蒙太奇的段边界上，播到就顺手叫一下攻击组件。
+                  这样做的好处是攻击的节奏完全交回给动画剪辑——想调手感就去挪通知的位置，
+                  一行代码都不用改。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 导航链接 ============ -->
+          <section class="detail__section" aria-labelledby="links-title">
+            <h2 id="links-title">导航链接</h2>
+            <p>
+              练手工程，没有传到公开仓库，也没有打包发布，所以这里没有可以点的链接。
+              想看具体某个类怎么写，或者想直接要工程文件，都可以写信跟我说。
+            </p>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">代码仓库</dt>
+                <dd class="spec__value">暂无公开仓库</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">打包发布</dt>
+                <dd class="spec__value">暂未发布</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">源码说明</dt>
+                <dd class="spec__value">核心逻辑见上方「技术文档」</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 翻页导航 ============ -->
+          <nav class="pager" aria-label="作品之间切换">
+            <a class="pager__link pager__link--prev" href="deep-sea-shipping.html" aria-label="上一个作品：深海航运">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+              上一项
+            </a>
+            <a class="pager__link pager__link--back" href="../index.html#works">返回作品列表</a>
+            <a class="pager__link pager__link--next" href="ue2d.html" aria-label="下一个作品：UE 2D 游戏">
+              下一项
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__text">© 2026 3445229764@qq.com · 保留所有权利</p>
+      <a class="link-more" href="../index.html#top">回到首页</a>
+    </div>
+  </footer>
+
+  <script src="../js/modules/menu.js"></script>
+  <script src="../js/modules/scroll.js"></script>
+  <script src="../js/modules/form.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

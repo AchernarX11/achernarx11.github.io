@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UE 2D 游戏 — Achernar</title>
+  <meta name="description" content="用 UE 的 Paper2D 和PaperZD 搭一个能走动的 2D 关卡：从瓦片集切瓦片、拼瓦片地图，到 Sprite 序列帧和角色蓝图按方向切换待机与行走动画。Unreal Engine 5.7，独立开发。">
+  <meta name="theme-color" content="#f9f7f4">
+
+  <link rel="icon" href="../assets/icons/icon-a.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/icons/icon-a.png" type="image/png" sizes="64x64">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+
+  <!-- ============ 顶部导航 ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="logo" href="../index.html">
+        <img class="logo__mark" src="../assets/images/logo.webp" alt="" width="633" height="633" loading="lazy" decoding="async">
+        <span class="logo__text">Achernar</span>
+      </a>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="visually-hidden">展开导航菜单</span>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+
+        <ul class="nav__list" id="nav-menu" data-open="false">
+          <li><a class="nav__link" href="../index.html#works">作品</a></li>
+          <li><a class="nav__link" href="../index.html#about">关于</a></li>
+          <li><a class="nav__link" href="../index.html#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="section">
+      <div class="container">
+        <!-- ============ 详情头部 ============ -->
+        <header class="detail__head">
+          <p class="section__eyebrow">Case 07 / 08</p>
+          <h1 class="detail__title">UE 2D 游戏</h1>
+          <ul class="tag-list detail__tags">
+            <li class="tag">UE5</li>
+            <li class="tag">蓝图</li>
+            <li class="tag">Paper2D</li>
+            <li class="tag">PaperZD</li>
+          </ul>
+          <p class="detail__lead">
+            前面几个用引擎做的东西全是 3D，个人偏向于2D游戏开发，Paper2D 这块一直没碰过，所以专门开了一个工程把它摸了一遍。
+            这个项目的目标不是做出好玩的玩法，而是搞清楚「在 UE 里搭一个 2D 关卡」这套流程到底由哪些环节组成——
+            做出来的东西就是一个像素小人能在草地上来回走。
+          </p>
+
+          <dl class="spec-list detail__meta">
+            <div class="spec">
+              <dt class="spec__key">时间</dt>
+              <dd class="spec__value">2026 年 8 月</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">团队</dt>
+              <dd class="spec__value">独立开发</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">角色</dt>
+              <dd class="spec__value">独立开发：瓦片资产、Sprite 与序列帧、角色蓝图与关卡搭建全部自己完成</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">开发环境</dt>
+              <dd class="spec__value">Unreal Engine 5.7</dd>
+            </div>
+            <div class="spec">
+              <dt class="spec__key">状态</dt>
+              <dd class="spec__value">可运行，模块练习工程/暂停更新</dd>
+            </div>
+          </dl>
+        </header>
+
+        <div class="detail__body">
+          <!-- ============ 概览与技术栈 ============ -->
+          <section class="detail__section" aria-labelledby="overview-title">
+            <h2 id="overview-title">概览与技术栈</h2>
+            <p>
+              在 UE 里做 2D 和做 3D 是两条不太一样的路。3D 那边拖个网格、摆个光就能看，
+              2D 这边要先有一堆中间资产：一张贴图不能直接用，得先切成「瓦片」或「Sprite」，
+              再拼成地图或做成序列帧。这次就是把这串中间环节一个个走通，
+              顺带确认一件事——引擎的 2D 部分到底能省掉多少自己写的代码。
+            </p>
+            <p>
+              地形这块走的是官方推荐的两步流程。先把一张草地贴图交给「瓦片集」编辑器，
+              在上面划分瓦片区域，指定瓦片尺寸和边距；瓦片集只是一张「配方」，
+              本身不构成关卡。再新建「瓦片地图」资产，用瓦片画笔在画布上刷，
+              一张地图可以叠若干层，草地一层、土路一层，角色走在地图上。
+              这套东西的好处是哪怕地图铺得很大，引擎也只按可见范围拼瓦片，不用手工摆几百个精灵。
+            </p>
+            <p>
+              角色和道具则是另一条线：把像素贴图逐个切出来做成 Sprite 资产。
+              单个 Sprite 是不动的，要动就得把若干张按顺序排进「Flipbook」——
+              它其实就是一段二维的逐帧动画，比如走路往下的那四张，按顺序摆好就是一秒的循环。
+              角色是「纸片角色」类型，身上挂了一个 Flipbook 组件负责显示当前这一帧，
+              另外还有碰撞盒、一个用来指示朝向的箭头、相机，以及引擎自带的角色移动组件。
+            </p>
+            <p>
+              动画切换没有用状态机，而是写在角色蓝图的自定义函数里：
+              每帧根据当前的移动方向和移动速度，决定该放待机还是行走、该放哪个朝向，
+              然后按方向分出几条分支，各自调用一次「设置 Flipbook」，把该换的序列帧换上去。
+              这种做法在只有四个方向、两种状态的时候完全够用，也最直观——
+              不过我也清楚，等状态多起来（受击、攻击、跳跃），这么一长串分支就没法维护了，
+              那才是需要引入 PaperZD 那种结构化方案的场合。
+            </p>
+
+            <h3>技术栈</h3>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">引擎</dt>
+                <dd class="spec__value">Unreal Engine 5.7</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">2D 框架</dt>
+                <dd class="spec__value">Paper2D：瓦片集、瓦片地图、Sprite、Flipbook 四类资产串起整个 2D 流程</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">地形</dt>
+                <dd class="spec__value">瓦片集负责划分贴图，瓦片地图负责用画笔拼装，草地与土路分层叠放</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">角色</dt>
+                <dd class="spec__value">纸片角色 + Flipbook 组件显示画面，碰撞盒、朝向箭头与相机挂在同一个蓝图上</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">动画</dt>
+                <dd class="spec__value">四条朝向各一套待机与行走 Flipbook，共八段序列帧，由蓝图按方向切换</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">移动</dt>
+                <dd class="spec__value">直接复用引擎自带的角色移动组件，平地行走、碰撞与相机跟随都不自己写</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">美术资源</dt>
+                <dd class="spec__value">像素素材来自公开的免费素材包，没有自制美术</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 截图与演示 ============ -->
+          <section class="detail__section" aria-labelledby="shots-title">
+            <h2 id="shots-title">截图与演示</h2>
+            <p>
+              先看一眼关卡编辑时的整体样子：视口里是绿色的草地加一条土黄小路，
+              中间那个红色帽子的小人就是玩家，旁边有一个NPC、树、箱子这类障碍，
+              上方还立了一块标牌。右侧大纲面板里能看到这个关卡有哪些东西——
+              角色蓝图、几个箱子与爆炸物的蓝图、出生点、后处理体积，以及草地瓦片地图本身。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue2d-cover.webp" alt="UE5 编辑器主界面，视口里是 Paper2D 做的像素风 2D 关卡，亮绿色瓦片铺成草地，中间一条土黄小路，路上有一个红帽精灵角色、垃圾桶与木箱障碍、几丛红绿树和花，上方有一块标牌；右侧大纲列表里有 Bp_Box1 到 Bp_Box4、BP_Boom、BP_Green、BP_Player、PlayerStart、PostProcessVolume 与草地瓦片地图等对象，底部内容浏览器停在 PaperAssets/Environment 目录" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  关卡编辑视图。注意左侧的 2D 视口其实是「一个平面」——相机正对着它看，
+                  所以 Sprite 只要按深度排好前后顺序，就能叠出层次。
+                  这个关卡里的东西加起来不到二十个对象，搭起来很快，
+                  真正花时间的是前面那些瓦片和序列帧资产。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <video class="shot__video" src="../assets/video/ue2d-demo-01.mp4" poster="../assets/images/ue2d-cover.webp" width="2560" height="1600" controls preload="none" playsinline>
+                    你的浏览器不支持 HTML5 视频，无法在这里播放这段录屏。
+                  </video>
+                </div>
+                <figcaption class="shot__caption">
+                  一段实际游玩的录屏：操纵小人在地图上往四个方向走一圈，
+                  可以看清切换方向时待机和行走两套序列帧是怎么接上的。
+                  视频默认不加载也不自动播放，点了播放按钮才开始下载——录屏是原画质，文件不小，需要等一会儿。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 技术文档 ============ -->
+          <section class="detail__section" aria-labelledby="docs-title">
+            <h2 id="docs-title">技术文档</h2>
+            <p>
+              这个工程没有单独的文档文件，所以挑五张编辑器截图，顺着「素材怎么从一张贴图变成会动的角色」这条线讲一遍。
+              顺序是：先看角色蓝图里动画是怎么切的，再回头从最上游的瓦片集开始，一直到序列帧拆成几段 Flipbook。
+            </p>
+
+            <div class="gallery gallery--single">
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue2d-doc-05.webp" alt="BP_Player 蓝图的事件图表界面，左上方写明父类是纸片角色，左侧组件面板从上到下依次是碰撞盒、箭头、相机、Flipbook、Sprite 与角色移动组件；中间图表里成组出现「设置 Flipbook」节点配条件分支，按方向分别接入不同的序列帧；右侧细节面板显示当前 Flipbook 为向下待机的序列帧、播放速率 1.0，变量列表里有 Direction、Mont Widget 与 Item Name" width="2559" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  <code>BP_Player</code> 的事件图表，也是整个工程里唯一一段「逻辑」。
+                  图里那几簇节点结构是一样的：先判断当前方向，再按「在走还是站着」挑一段 Flipbook 设进去。
+                  之所以敢这么写，是因为方向只有四个、状态只有两种；
+                  截图右侧的变量列表里那个 Direction 就是判断的依据，由移动组件算出来。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue2d-doc-01.webp" alt="Paper2D 的瓦片集编辑器，左侧瓦片集视图里以 8 倍放大显示一张绿色草地贴图，底边包含四块土黄色瓦片；右侧贴图编辑器显示按 4 列 3 行划分出的十二个瓦片分区，下方参数写明瓦片大小 16、外边距 4、所属瓦片集为草地瓦片集" width="2544" height="1587" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  瓦片集编辑器。它做的事情只有一件：告诉引擎「这张贴图从哪一格到哪一格算一块瓦片」。
+                  截图里的参数是瓦片 16 像素、外边距 4 像素——这个边距不能省，
+                  否则缩小显示时相邻瓦片会互相渗色。划分好之后，瓦片地图才认识这些格子。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue2d-doc-02.webp" alt="Paper2D 的瓦片地图编辑器，工具条上有瓦片画笔、橡皮擦和选择工具，当前选中第一块瓦片，绑定的瓦片集是草地瓦片集，画布尺寸 2000 乘 2000、缩放 3 倍；工作区是绿色草地上刷出一列土黄色瓦片；右侧细节面板列出瓦片宽高、像素外观比、边缘填充、多瓦片网格颜色等参数" width="2558" height="1599" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  瓦片地图编辑器，也就是真正铺关卡的地方。
+                  工具只有画笔、橡皮擦和选择三个，用起来像很朴素的像素画板：
+                  选一块瓦片，在画布上按住鼠标刷过去。截图里正在刷的就是那条土黄小路，
+                  它单独占一层，压在草地那层上面。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue2d-doc-03.webp" alt="内容浏览器里排列着十六个 Sprite 资产，名字从 T_Red_Sprite_0 一直到 T_Red_Sprite_15，缩略图是同一个红帽子像素小人的十六个连续动作，一格一帧" width="1456" height="466" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  从贴图里切出来的单个 Sprite，十六格就是一整套动作。
+                  这一步是最琐碎也最容易出错的：切片的行列数和偏移必须和原图严丝合缝，
+                  否则每一帧都会歪一点，动起来就是抖的。
+                </figcaption>
+              </figure>
+
+              <figure class="shot shot--natural">
+                <div class="shot__frame">
+                  <img class="shot__img" src="../assets/images/ue2d-doc-04.webp" alt="内容浏览器里搜索 Red 的结果，包含 Sprite 文件夹与名为 T_Red 的纹理，以及八个纸片图像序列视图资产，分别是向下的待机、向左的待机、向右的待机、向上的待机，以及向下的行走、向左的行走、向右的行走、向上的行走，其中向下的行走被选中" width="1387" height="309" loading="lazy" decoding="async">
+                </div>
+                <figcaption class="shot__caption">
+                  最后一步，把挑出来的 Sprite 按顺序摆进序列帧资产。
+                  命名规则是「待机或行走 + 方向」，四个方向各两套，一共八个；
+                  角色蓝图里那句「设置 Flipbook」，换的就是这里的某一个。
+                  到这一步，一张静态贴图才算变成了会动的角色。
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ============ 导航链接 ============ -->
+          <section class="detail__section" aria-labelledby="links-title">
+            <h2 id="links-title">导航链接</h2>
+            <p>
+              练手工程，没有传到公开仓库，也没有打包发布，所以这里没有可以点的链接。
+              想看某个资产的具体参数，或者想直接要工程文件，都可以写信跟我说。
+            </p>
+            <dl class="spec-list">
+              <div class="spec">
+                <dt class="spec__key">代码仓库</dt>
+                <dd class="spec__value">暂无公开仓库</dd>
+              </div>
+              <div class="spec">
+                <dt class="spec__key">打包发布</dt>
+                <dd class="spec__value">暂未发布</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ============ 翻页导航 ============ -->
+          <nav class="pager" aria-label="作品之间切换">
+            <a class="pager__link pager__link--prev" href="ue-template.html" aria-label="上一个作品：UE 模板复刻">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+              上一项
+            </a>
+            <a class="pager__link pager__link--back" href="../index.html#works">返回作品列表</a>
+            <a class="pager__link pager__link--next" href="dungeon.html" aria-label="下一个作品：地牢">
+              下一项
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__text">© 2026 3445229764@qq.com · 保留所有权利</p>
+      <a class="link-more" href="../index.html#top">回到首页</a>
+    </div>
+  </footer>
+
+  <script src="../js/modules/menu.js"></script>
+  <script src="../js/modules/scroll.js"></script>
+  <script src="../js/modules/form.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achernar · 软件工程在读，游戏开发学习中</title>
+  <meta name="description" content="Achernar的个人站点：软件工程专业大二在读，记录课余做的游戏开发练习、原型，以及踩过的坑。">
+  <meta name="theme-color" content="#f9f7f4">
+
+  <link rel="icon" href="assets/icons/icon-a.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icons/icon-a.png" type="image/png" sizes="64x64">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+
+  <!-- ============ 顶部导航 ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="logo" href="#hero">
+        <img class="logo__mark" src="assets/images/logo.webp" alt="" width="633" height="633" loading="lazy" decoding="async">
+        <span class="logo__text">Achernar</span>
+      </a>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="visually-hidden">展开导航菜单</span>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+          <svg class="icon nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+
+        <ul class="nav__list" id="nav-menu" data-open="false">
+          <li><a class="nav__link" href="#works">作品</a></li>
+          <li><a class="nav__link" href="#about">关于</a></li>
+          <li><a class="nav__link" href="#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Hero ============ -->
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <svg class="hero__decor" viewBox="0 0 560 560" fill="none" aria-hidden="true" focusable="false">
+        <circle cx="380" cy="200" r="180" stroke="currentColor" stroke-width="1.5" opacity="0.45"></circle>
+        <circle cx="380" cy="200" r="124" stroke="currentColor" stroke-width="1.5" opacity="0.3"></circle>
+        <circle cx="380" cy="200" r="64" fill="currentColor" opacity="0.12"></circle>
+        <path d="M60 470h440" stroke="currentColor" stroke-width="1.5" opacity="0.25"></path>
+        <path d="M60 500h300" stroke="currentColor" stroke-width="1.5" opacity="0.18"></path>
+        <circle cx="120" cy="120" r="6" fill="currentColor" opacity="0.5"></circle>
+        <circle cx="180" cy="120" r="6" fill="currentColor" opacity="0.35"></circle>
+        <circle cx="240" cy="120" r="6" fill="currentColor" opacity="0.2"></circle>
+      </svg>
+
+      <div class="container hero__inner">
+        <p class="section__eyebrow">软件工程在读 · 游戏开发方向</p>
+        <h1 class="hero__title" id="hero-title">
+          Achernar<br>
+          软件工程大二在读，<em class="hero__title-accent">独立游戏开发</em>
+        </h1>
+        <p class="hero__lead">
+          欢迎大家，编程和游戏开发都是自己一点点摸索的。这里放了一些课余做的练习项目和
+          踩过的坑，欢迎随便看看，也欢迎指正。
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#works">
+            看看作品
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M5 12h14M13 5l7 7-7 7"></path>
+            </svg>
+          </a>
+          <a class="btn btn--ghost" href="#contact">联系我</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 作品展示 ============ -->
+    <section class="section works" id="works" aria-labelledby="works-title">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="section__eyebrow">Works in Progress</p>
+          <h2 class="section__title" id="works-title">我的作品集</h2>
+          <p class="section__lead">
+            游戏开发学习中，有几个目前还只是能跑起来的原型。
+            如果你对哪个感兴趣，或者想指出哪里做得不对，欢迎直接写信告诉我。
+          </p>
+        </div>
+
+        <div class="works__grid">
+          <article class="card work-card reveal">
+            <div class="work-card__media">
+              <img class="work-card__img work-card__img--top" src="assets/images/minesweeper-cover.webp" alt="扫雷的控制台界面，顶部显示地图雷数 5、插旗数量 0、安全区发现数量 0，A 到 J 的列标下面是尚未翻开的雷区" width="491" height="441" loading="lazy" decoding="async">
+            </div>
+            <div class="work-card__body">
+              <ul class="tag-list">
+                <li class="tag">C++</li>
+                <li class="tag">控制台</li>
+                <li class="tag">面向对象</li>
+              </ul>
+              <h3 class="work-card__title">扫雷</h3>
+              <p class="work-card__desc">
+                入门游戏开发的第一个项目，用 C++ 写在控制台里。二维数组存地图，靠输入坐标操作，把面向对象和多文件开发练了一遍。
+              </p>
+              <a class="link-more work-card__link" href="works/minesweeper.html">
+                查看详情
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="card work-card reveal">
+            <div class="work-card__media">
+              <img class="work-card__img" src="assets/images/maze-cover.webp" alt="迷宫的控制台界面，四周用 @ 围成边界，# 是墙壁，通路中散布着玩家起点 A、终点 E 和道具 X" width="1222" height="580" loading="lazy" decoding="async">
+            </div>
+            <div class="work-card__body">
+              <ul class="tag-list">
+                <li class="tag">C++</li>
+                <li class="tag">控制台</li>
+                <li class="tag">DFS</li>
+              </ul>
+              <h3 class="work-card__title">迷宫</h3>
+              <p class="work-card__desc">
+                第二个项目，每局用 DFS 现场生成迷宫。为了让键盘响应跟得上，换掉了必须按回车的输入；又为了消掉整屏重印的闪烁，改成只重画变化处的双端打印。
+              </p>
+              <a class="link-more work-card__link" href="works/maze.html">
+                查看详情
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="card work-card reveal">
+            <div class="work-card__media">
+              <img class="work-card__img" src="assets/images/wordtrip-cover.webp" alt="词途奇遇的战斗界面，像素风蓝甲骑士背对镜头面对发光的黑影怪物，上方显示双方血量，底部是中文释义与英文拼写输入框" width="1102" height="1182" loading="lazy" decoding="async">
+            </div>
+            <div class="work-card__body">
+              <ul class="tag-list">
+                <li class="tag">Vibe Coding</li>
+                <li class="tag">前端</li>
+              </ul>
+              <h3 class="work-card__title">词途奇遇</h3>
+              <p class="work-card__desc">
+                靠拼写英文单词打怪的网页游戏。代码基本由 AI 生成，我负责拆需求与验收——第一次完整走完一个多模块项目。
+              </p>
+              <a class="link-more work-card__link" href="works/wordtrip.html">
+                查看详情
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="card work-card reveal">
+            <div class="work-card__media">
+              <img class="work-card__img" src="assets/images/dead-silence-cover.webp" alt="死寂的实机画面，第三人称视角下主角背对镜头站在雾中的废弃公路上，两旁是翻倒的车辆与枯树，左上角是任务提示，右下角是弹药数" width="2559" height="1599" loading="lazy" decoding="async">
+            </div>
+            <div class="work-card__body">
+              <ul class="tag-list">
+                <li class="tag">UE5</li>
+                <li class="tag">蓝图</li>
+              </ul>
+              <h3 class="work-card__title">死寂Demo</h3>
+              <p class="work-card__desc">
+                第一次用引擎做完整流程。蓝图、动画蓝图、行为树、UMG 一路摸下来，练的是流程，不是玩法。
+              </p>
+              <a class="link-more work-card__link" href="works/dead-silence.html">
+                查看详情
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="card work-card reveal">
+            <div class="work-card__media">
+              <img class="work-card__img" src="assets/images/deep-sea-shipping-cover.webp" alt="深海航运的主视觉，漆黑的深海里浮着锈迹斑斑的标题「深海航运 / DEEP SEA SHIPPING demo」，下方一艘潜艇的侧影，右侧暗处藏着一条眼睛发红光的巨大海怪" width="1672" height="941" loading="lazy" decoding="async">
+            </div>
+            <div class="work-card__body">
+              <ul class="tag-list">
+                <li class="tag">Godot 4</li>
+                <li class="tag">Vibe Coding</li>
+              </ul>
+              <h3 class="work-card__title">深海航运</h3>
+              <p class="work-card__desc">
+                HD2D 俯视潜艇生存 Demo：在全黑的海底靠声纳摸索前行，管好船壳、进水、氧气和电力。
+                代码由 AI 通过 MCP 写，人负责规则与数值。
+              </p>
+              <a class="link-more work-card__link" href="works/deep-sea-shipping.html">
+                查看详情
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="card work-card reveal">
+            <div class="work-card__media">
+              <img class="work-card__img" src="assets/images/ue-template-cover.webp" alt="UE 的动画蒙太奇编辑界面，中间是穿着白色紧身衣的 Quinn 人形骨骼网格正在预览，下方时间轴里排着 Attack1、Attack2、Attack3 三段蒙太奇片段，片段起止处挂着 CPP_ComboWindow 段通知标记，右侧是包含三段攻击与若干移动动画的资源列表" width="2559" height="1599" loading="lazy" decoding="async">
+            </div>
+            <div class="work-card__body">
+              <ul class="tag-list">
+                <li class="tag">UE5</li>
+                <li class="tag">C++</li>
+              </ul>
+              <h3 class="work-card__title">UE 模板复刻</h3>
+              <p class="work-card__desc">
+                把引擎自带的第三人称模板用 C++ 重写一遍的练手工程。增强输入接管移动与跳跃，
+                动画蒙太奇配段通知做三段连击。
+              </p>
+              <a class="link-more work-card__link" href="works/ue-template.html">
+                查看详情
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="card work-card reveal">
+            <div class="work-card__media">
+              <img class="work-card__img" src="assets/images/ue2d-cover.webp" alt="UE5 编辑器里的一个 Paper2D 像素风 2D 关卡，亮绿色瓦片铺成草地，中间一条土黄小路，路上有一个红帽精灵角色、垃圾桶与木箱障碍、几丛红绿树和花，上方有一块标牌，右侧是大纲面板，底部是内容浏览器" width="2559" height="1599" loading="lazy" decoding="async">
+            </div>
+            <div class="work-card__body">
+              <ul class="tag-list">
+                <li class="tag">UE5</li>
+                <li class="tag">Paper2D</li>
+              </ul>
+              <h3 class="work-card__title">UE 2D 游戏</h3>
+              <p class="work-card__desc">
+                专门用来摸引擎 2D 模块的练习：从瓦片集、瓦片地图，到 Sprite 序列帧和角色按方向切换动画。
+                目标是把流程走通，不是做玩法。
+              </p>
+              <a class="link-more work-card__link" href="works/ue2d.html">
+                查看详情
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="card work-card reveal">
+            <div class="work-card__media">
+              <img class="work-card__img" src="assets/images/dungeon-cover.webp" alt="UE5 编辑器里的 2D 地牢关卡编辑视图，地图上站着持盾骑士、白色旗帜与绿色小怪物三个纸片精灵，每个精灵外圈都套着椭圆形的碰撞范围轮廓和蓝色朝向箭头，左侧大纲面板列出瓦片地图、出生点与角色蓝图" width="2558" height="1599" loading="lazy" decoding="async">
+            </div>
+            <div class="work-card__body">
+              <ul class="tag-list">
+                <li class="tag">UE5</li>
+                <li class="tag">C++</li>
+                <li class="tag">Paper2D</li>
+              </ul>
+              <h3 class="work-card__title">地牢</h3>
+              <p class="work-card__desc">
+                摸清引擎 2D 流程之后的第一个「打起来」的项目，逻辑全部用 C++ 写。
+                动手前先画类结构，伤害接口、受击盒、攻击判定都自己搭。
+              </p>
+              <a class="link-more work-card__link" href="works/dungeon.html">
+                查看详情
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 关于我 ============ -->
+    <section class="section about" id="about" aria-labelledby="about-title">
+      <div class="container about__grid">
+        <figure class="about__portrait reveal">
+          <img src="assets/images/avatar.jpg" alt="Achernar 的头像" width="1000" height="1000" loading="lazy" decoding="async">
+        </figure>
+
+        <div class="about__content reveal">
+          <p class="section__eyebrow">About</p>
+          <h2 class="section__title" id="about-title">热爱游戏开发</h2>
+          <p>
+            软件工程专业在读学生，希望不断提升自己的编程能力，设计能力。
+          </p>
+          <p>
+            课余时间基本都给了游戏开发。从 C++ 上手，现在学习 UECPP，很多东西还停在「能跑就行」的阶段，
+            代码经常重构，作品挺粗糙的。
+          </p>
+          <p>
+            这个站点主要用于存放个人作品集，分享自己的代码以及记录学习过程。
+          </p>
+
+          <ul class="about__stats">
+            <!-- 待替换：以下数字请按自己的真实情况调整 -->
+            <li class="stat">
+              <span class="stat__value">大二</span>
+              <span class="stat__label">软件工程在读</span>
+            </li>
+            <li class="stat">
+              <span class="stat__value">6</span>
+              <span class="stat__label">个课余练习项目</span>
+            </li>
+            <li class="stat">
+              <span class="stat__value">1</span>
+              <span class="stat__label">年自学引擎</span>
+            </li>
+            <li class="stat">
+              <span class="stat__value">2</span>
+              <span class="stat__label">个跑通全流程的 Demo</span>
+            </li>
+          </ul>
+
+          <ul class="about__skills">
+            <li class="tag">软件工程基础课</li>
+            <li class="tag">Unreal Engine</li>
+            <li class="tag">Blender</li>
+            <li class="tag">C++</li>
+            <li class="tag">vibe coding</li>
+            <li class="tag">2DGame</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 联系方式 ============ -->
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="section__eyebrow">Contact</p>
+          <h2 class="section__title" id="contact-title">想聊聊游戏开发，或者有实习机会？</h2>
+          <p class="section__lead">
+            大学在读，目前主要想找的是实习和做小项目的伙伴；
+            也乐意听别人吐槽我的代码和设计。
+          </p>
+        </div>
+
+        <div class="contact__grid">
+          <div class="contact__panel reveal">
+            <a class="contact__mail" href="mailto:3445229764@qq.com">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="m22 7-10 6L2 7"></path>
+              </svg>
+              3445229764@qq.com
+            </a>
+            <p class="contact__note">看到邮件我都会回，可能回复较慢，见谅。</p>
+
+            <ul class="social">
+              <li>
+                <a class="social__link" href="https://github.com" aria-label="在 GitHub 查看我的代码">
+                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                    <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.41-1.27.74-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.42.36.79 1.08.79 2.18v3.24c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"></path>
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a class="social__link" href="https://v.douyin.com/ZftXgVohLdg/" aria-label="在抖音查看我的视频">
+                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                    <path d="M12.53.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07Z"></path>
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a class="social__link" href="https://b23.tv/CIjAhet" aria-label="在哔哩哔哩查看我的视频">
+                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                    <path fill-rule="evenodd" d="M5.6 8.4h12.8a3.2 3.2 0 0 1 3.2 3.2v5.8a3.2 3.2 0 0 1-3.2 3.2H5.6a3.2 3.2 0 0 1-3.2-3.2v-5.8a3.2 3.2 0 0 1 3.2-3.2Zm1.7 3.1a1.2 1.2 0 0 0-1.2 1.2v3.4a1.2 1.2 0 0 0 1.2 1.2h1.2a1.2 1.2 0 0 0 1.2-1.2v-3.4a1.2 1.2 0 0 0-1.2-1.2H7.3Zm8.2 0a1.2 1.2 0 0 0-1.2 1.2v3.4a1.2 1.2 0 0 0 1.2 1.2h1.2a1.2 1.2 0 0 0 1.2-1.2v-3.4a1.2 1.2 0 0 0-1.2-1.2h-1.2Z"></path>
+                    <path d="M8 8.2 5.4 5.2M16 8.2l2.6-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="contact__form-card reveal">
+            <form class="form" id="contact-form" novalidate>
+              <div class="field field--required">
+                <label class="field__label" for="name">你的称呼</label>
+                <input class="field__input" id="name" name="name" type="text" autocomplete="name" placeholder="怎么称呼你" required aria-describedby="name-error">
+                <p class="field__error" id="name-error"></p>
+              </div>
+
+              <div class="field field--required">
+                <label class="field__label" for="email">邮箱</label>
+                <input class="field__input" id="email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required aria-describedby="email-error">
+                <p class="field__error" id="email-error"></p>
+              </div>
+
+              <div class="field field--required">
+                <label class="field__label" for="message">想聊的内容</label>
+                <textarea class="field__input" id="message" name="message" rows="5" placeholder="想聊什么都可以，比如实习机会、一起做个小项目，或者某个技术问题" required aria-describedby="message-error"></textarea>
+                <p class="field__error" id="message-error"></p>
+              </div>
+
+              <div class="form__actions">
+                <button class="btn btn--primary" type="submit">
+                  发送信息
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M5 12h14M13 5l7 7-7 7"></path>
+                  </svg>
+                </button>
+                <p class="form__status" id="form-status" role="status" aria-live="polite">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="m5 13 4 4 10-10"></path>
+                  </svg>
+                  <span></span>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__text">© 2026 3445229764@qq.com · 保留所有权利</p>
+      <a class="link-more" href="#hero">回到顶部</a>
+    </div>
+  </footer>
+
+  <script src="js/modules/menu.js"></script>
+  <script src="js/modules/scroll.js"></script>
+  <script src="js/modules/form.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

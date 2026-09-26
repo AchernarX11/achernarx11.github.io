@@ -1,0 +1,103 @@
+/* ============================================================
+   variables.css — 设计令牌（颜色 / 排版 / 间距 / 圆角 / 阴影 / 动效）
+   规则：全站唯一的「数值来源」，其他样式文件一律引用变量，禁止散落硬编码
+   ============================================================ */
+
+:root {
+  /* ---------- 颜色 ---------- */
+  --color-bg: #f9f7f4;
+  --color-surface: #ffffff;
+  --color-text: #1e1e1e;
+  --color-text-muted: #5a5a5a;
+  --color-accent: #c49a6c;
+  --color-accent-strong: #a97f52; /* 用于大号文字，保证对比度 ≥ 3:1 */
+  --color-accent-soft: rgba(196, 154, 108, 0.14);
+  --color-border: #e9e5e0;
+
+  /* ---------- 字体 ---------- */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  /* 代码片段用系统等宽字体，避免为技术文档额外引入字体请求 */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+
+  /* ---------- 流体字号 ---------- */
+  --fs-h1: clamp(2.5rem, 1.7rem + 3.6vw, 4.25rem);
+  --fs-h2: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+  --fs-h3: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --fs-lead: clamp(1rem, 0.95rem + 0.4vw, 1.25rem);
+  --fs-body: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.75rem;
+
+  --lh-tight: 1.2;
+  --lh-base: 1.6;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --measure: 65ch;
+
+  /* ---------- 间距（8px 基准网格） ---------- */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 60px;
+  --space-7: 80px;
+  --section-y: clamp(var(--space-6), 6vw, var(--space-7));
+  --spec-key-width: 88px;
+  /* 竖屏录屏独占一整行时的宽度上限，避免在宽屏上被拉成很高的柱子 */
+  --video-max-width: 420px;
+
+  /* ---------- 圆角 ---------- */
+  --radius: 20px;
+  --radius-sm: 12px;
+  --radius-pill: 40px;
+
+  /* ---------- 阴影 ---------- */
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.06);
+
+  /* ---------- 描边 ---------- */
+  --border-width: 1px;
+  --underline-width: 2px;
+  --underline-offset: 6px;
+
+  /* ---------- 动效（微交互 200ms / 区块过渡 300-400ms） ---------- */
+  --duration-fast: 200ms;
+  --duration-base: 300ms;
+  --duration-slow: 400ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: all var(--duration-base) var(--ease-standard);
+  --transition-fast: all var(--duration-fast) var(--ease-standard);
+
+  /* ---------- 布局 ---------- */
+  --container: 1280px;
+  --header-h: 68px;
+  --hero-ceil: 720px;
+  --focus-ring: 2px solid var(--color-accent-strong);
+  --z-header: 100;
+  /* 跳转链接必须盖在吸顶栏之上，否则聚焦时会被吸顶栏遮住 */
+  --z-skip: 200;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 80px;
+  }
+}
+
+/* 无障碍：命中「减少动态效果」时，统一关闭所有过渡
+   除了把 --transition* 置为 none，还要把时长令牌归零，
+   因为部分样式直接引用了 --duration-* 做单项属性过渡 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition: none;
+    --transition-fast: none;
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
